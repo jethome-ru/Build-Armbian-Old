@@ -50,12 +50,20 @@ embed_8822cs_driver() {
   fi
 }
 
+create_deb_packages() {
+  mkdir -v /tmp/overlay/debs
+  for package_script in /tmp/overlay/packages/*; do
+    source $package_script
+  done
+}
+
 Main() {
   case $RELEASE in
     focal)
       if [[ "$LINUXFAMILY" = "arm-64" ]]; then
         if [[ "$BOARD" = "arm-64" ]]; then
           embed_8822cs_driver
+          create_deb_packages
         fi
       fi
       ;;

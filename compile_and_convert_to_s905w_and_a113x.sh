@@ -18,11 +18,11 @@ mkdir -pv $USERPATCHES_SOURCES_FAMILIES
 mkdir -pv $USERPATCHES_OVERLAY
 
 rm -fv $USERPATCHES_KERNEL_ARM_64/*
-rm -fv $USERPATCHES_OVERLAY/*
+rm -frv $USERPATCHES_OVERLAY/*
 
 cp -fv $JETHOME/patch/kernel/arm-64-current/* $USERPATCHES_KERNEL_ARM_64/
 cp -fv $JETHOME/patch/sources/families/arm-64.conf $USERPATCHES_SOURCES_FAMILIES/
-cp -fv $JETHOME/overlay/* $USERPATCHES_OVERLAY/
+cp -frv $JETHOME/overlay/* $USERPATCHES_OVERLAY/
 cp -fv $JETHOME/customize-image.sh $USERPATCHES/
 cp -fv $JETHOME/lib.config $USERPATCHES/
 
