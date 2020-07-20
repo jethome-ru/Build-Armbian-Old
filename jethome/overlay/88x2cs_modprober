@@ -1,4 +1,0 @@
-if [ -z "$(grep 88x2cs /lib/modules/$(uname -r)/modules.dep)" ]; then
-  depmod -a
-  modprobe 88x2cs
-fi

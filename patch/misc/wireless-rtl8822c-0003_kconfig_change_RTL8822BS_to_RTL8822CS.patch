@@ -1,0 +1,8 @@
+--- a/drivers/net/wireless/rtl8822c/Kconfig	2020-03-02 05:34:17.000000000 +0300
++++ b/drivers/net/wireless/rtl8822c/Kconfig	2020-07-17 15:39:59.855885997 +0300
+@@ -1,4 +1,4 @@
+-config RTL8822BS
++config RTL8822CS
+ 	tristate "Realtek 8822C SDIO WiFi"
+ 	---help---
+ 	  Help message of RTL8822CS

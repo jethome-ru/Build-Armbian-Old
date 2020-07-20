@@ -190,6 +190,51 @@ compilation_prepare()
 
 	fi
 
+
+
+
+	# Wireless drivers for Realtek 88x2CS chipsets
+
+	if linux-version compare "${version}" ge 3.14 && [ "$EXTRAWIFI" == yes ]; then
+
+		# attach to specifics tag or branch
+		local rtl8822cver="branch:v5.9.0.2"
+		local rtl8822c_gz="rtl88x2CS_WiFi_linux_v5.9.0.2_36407.20200302_COEX20200103-1717.tar.gz"
+		local rtl8822c_dir="${SRC}/cache/sources/rtl8822c/${rtl8822cver#*:}"
+
+		display_alert "Adding" "Wireless drivers for 88x2CS chipsets" "info"
+
+		rm -rf "${SRC}/cache/sources/rtl8822c"
+		mkdir -p "${SRC}/cache/sources/rtl8822c"
+		tar -xf "${SRC}/jethome/overlay/drivers/rtl88x2CS/$rtl8822c_gz" -C "${SRC}/cache/sources"
+		mv "${SRC}/cache/sources/${rtl8822c_gz%.tar.gz}" "$rtl8822c_dir"
+
+		cd "${SRC}/cache/sources/${LINUXSOURCEDIR}" || exit
+		rm -rf "${SRC}/cache/sources/${LINUXSOURCEDIR}/drivers/net/wireless/rtl8822c"
+		mkdir -p "${SRC}/cache/sources/${LINUXSOURCEDIR}/drivers/net/wireless/rtl8822c/"
+		cp -R "$rtl8822c_dir"/{core,hal,include,os_dep,platform,halmac.mk,ifcfg-wlan0,rtl8822c.mk,runwpa,wlan0dhcp} \
+		"${SRC}/cache/sources/${LINUXSOURCEDIR}/drivers/net/wireless/rtl8822c"
+
+		# Makefile
+		cp "$rtl8822c_dir/Makefile" \
+		"${SRC}/cache/sources/${LINUXSOURCEDIR}/drivers/net/wireless/rtl8822c/Makefile"
+		cp "$rtl8822c_dir/Kconfig" \
+		"${SRC}/cache/sources/${LINUXSOURCEDIR}/drivers/net/wireless/rtl8822c/Kconfig"
+
+		# Add to section Makefile
+		echo "obj-\$(CONFIG_RTL8822CS) += rtl8822c/" >> "${SRC}/cache/sources/${LINUXSOURCEDIR}/drivers/net/wireless/Makefile"
+		sed -i '/source "drivers\/net\/wireless\/ti\/Kconfig"/a source "drivers\/net\/wireless\/rtl8822c\/Kconfig"' \
+		"${SRC}/cache/sources/${LINUXSOURCEDIR}/drivers/net/wireless/Kconfig"
+
+		process_patch_file "${SRC}/patch/misc/wireless-rtl8822c-0001-include-types-h-from-uapi.patch"                "applying"
+		process_patch_file "${SRC}/patch/misc/wireless-rtl8822c-0002-replace-file_operations-with-proc_ops.patch"    "applying"
+		process_patch_file "${SRC}/patch/misc/wireless-rtl8822c-0003_kconfig_change_RTL8822BS_to_RTL8822CS.patch"     "applying"
+
+	fi
+
+
+
+
 	# Wireless drivers for Realtek 8189ES chipsets
 
 	if linux-version compare "${version}" ge 3.14 && [ "$EXTRAWIFI" == yes ]; then
