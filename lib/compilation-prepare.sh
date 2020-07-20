@@ -301,32 +301,32 @@ compilation_prepare()
 
 	# Wireless drivers for Realtek 8811, 8812, 8814 and 8821 chipsets
 
-	if linux-version compare "${version}" ge 3.14 && [ "$EXTRAWIFI" == yes ]; then
+	# if linux-version compare "${version}" ge 3.14 && [ "$EXTRAWIFI" == yes ]; then
 
-		# attach to specifics tag or branch
-		local rtl8812auver="branch:v5.6.4.2"
+	# 	# attach to specifics tag or branch
+	# 	local rtl8812auver="branch:v5.6.4.2"
 
-		display_alert "Adding" "Wireless drivers for Realtek 8811, 8812, 8814 and 8821 chipsets ${rtl8812auver}" "info"
+	# 	display_alert "Adding" "Wireless drivers for Realtek 8811, 8812, 8814 and 8821 chipsets ${rtl8812auver}" "info"
 
-		fetch_from_repo "https://github.com/aircrack-ng/rtl8812au" "rtl8812au" "${rtl8812auver}" "yes"
-		cd "${SRC}/cache/sources/${LINUXSOURCEDIR}" || exit
-		rm -rf "${SRC}/cache/sources/${LINUXSOURCEDIR}/drivers/net/wireless/rtl8812au"
-		mkdir -p "${SRC}/cache/sources/${LINUXSOURCEDIR}/drivers/net/wireless/rtl8812au/"
-		cp -R "${SRC}/cache/sources/rtl8812au/${rtl8812auver#*:}"/{core,hal,include,os_dep,platform} \
-		"${SRC}/cache/sources/${LINUXSOURCEDIR}/drivers/net/wireless/rtl8812au"
+	# 	fetch_from_repo "https://github.com/aircrack-ng/rtl8812au" "rtl8812au" "${rtl8812auver}" "yes"
+	# 	cd "${SRC}/cache/sources/${LINUXSOURCEDIR}" || exit
+	# 	rm -rf "${SRC}/cache/sources/${LINUXSOURCEDIR}/drivers/net/wireless/rtl8812au"
+	# 	mkdir -p "${SRC}/cache/sources/${LINUXSOURCEDIR}/drivers/net/wireless/rtl8812au/"
+	# 	cp -R "${SRC}/cache/sources/rtl8812au/${rtl8812auver#*:}"/{core,hal,include,os_dep,platform} \
+	# 	"${SRC}/cache/sources/${LINUXSOURCEDIR}/drivers/net/wireless/rtl8812au"
 
-		# Makefile
-		cp "${SRC}/cache/sources/rtl8812au/${rtl8812auver#*:}/Makefile" \
-		"${SRC}/cache/sources/${LINUXSOURCEDIR}/drivers/net/wireless/rtl8812au/Makefile"
-		cp "${SRC}/cache/sources/rtl8812au/${rtl8812auver#*:}/Kconfig" \
-		"${SRC}/cache/sources/${LINUXSOURCEDIR}/drivers/net/wireless/rtl8812au/Kconfig"
+	# 	# Makefile
+	# 	cp "${SRC}/cache/sources/rtl8812au/${rtl8812auver#*:}/Makefile" \
+	# 	"${SRC}/cache/sources/${LINUXSOURCEDIR}/drivers/net/wireless/rtl8812au/Makefile"
+	# 	cp "${SRC}/cache/sources/rtl8812au/${rtl8812auver#*:}/Kconfig" \
+	# 	"${SRC}/cache/sources/${LINUXSOURCEDIR}/drivers/net/wireless/rtl8812au/Kconfig"
 
-		# Add to section Makefile
-		echo "obj-\$(CONFIG_88XXAU) += rtl8812au/" >> "${SRC}/cache/sources/${LINUXSOURCEDIR}/drivers/net/wireless/Makefile"
-		sed -i '/source "drivers\/net\/wireless\/ti\/Kconfig"/a source "drivers\/net\/wireless\/rtl8812au\/Kconfig"' \
-		"${SRC}/cache/sources/${LINUXSOURCEDIR}/drivers/net/wireless/Kconfig"
+	# 	# Add to section Makefile
+	# 	echo "obj-\$(CONFIG_88XXAU) += rtl8812au/" >> "${SRC}/cache/sources/${LINUXSOURCEDIR}/drivers/net/wireless/Makefile"
+	# 	sed -i '/source "drivers\/net\/wireless\/ti\/Kconfig"/a source "drivers\/net\/wireless\/rtl8812au\/Kconfig"' \
+	# 	"${SRC}/cache/sources/${LINUXSOURCEDIR}/drivers/net/wireless/Kconfig"
 
-	fi
+	# fi
 
 
 
