@@ -1,6 +1,6 @@
 UBOOT_TARGET_MAP="u-boot-dtb.img;;u-boot.bin.sd.bin:u-boot.bin u-boot-dtb.img"
 BOOTSCRIPT="boot-meson64.cmd:boot.cmd"
-BOOTENV_FILE='meson64-next.txt'
+BOOTENV_FILE='meson.txt'
 LINUXFAMILY=meson64
 ARCH=arm64
 SERIALCON=ttyAML0
@@ -20,10 +20,13 @@ GOVERNOR=conservative
 
 case $BRANCH in
 
-        current|dev)
-
-		KERNELBRANCH='branch:linux-5.6.y'
-		KERNELPATCHDIR='meson64-current'
+        current)
+                KERNELBRANCH='branch:linux-5.7.y'
+                KERNELPATCHDIR='meson64-current'
+        ;;
+        dev)
+                KERNELBRANCH='branch:linux-5.7.y'
+                KERNELPATCHDIR='meson64-dev'
         ;;
 
 esac

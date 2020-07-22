@@ -1,0 +1,101 @@
+--- a/arch/arm/dts/rk3328.dtsi
++++ b/arch/arm/dts/rk3328.dtsi
+@@ -334,6 +334,31 @@
+ 			clocks = <&cru ACLK_DMAC>;
+ 			clock-names = "apb_pclk";
+ 			#dma-cells = <1>;
++		};
++	};
++
++	efuse: efuse@ff260000 {
++		compatible = "rockchip,rk3328-efuse";
++		reg = <0x0 0xff260000 0x0 0x50>;
++		#address-cells = <1>;
++		#size-cells = <1>;
++		clocks = <&cru SCLK_EFUSE>;
++		clock-names = "pclk_efuse";
++		rockchip,efuse-size = <0x20>;
++
++		/* Data cells */
++		efuse_id: id@7 {
++			reg = <0x07 0x10>;
++		};
++		cpu_leakage: cpu-leakage@17 {
++			reg = <0x17 0x1>;
++		};
++		logic_leakage: logic-leakage@19 {
++			reg = <0x19 0x1>;
++		};
++		efuse_cpu_version: cpu-version@1a {
++			reg = <0x1a 0x1>;
++			bits = <3 3>;
+ 		};
+ 	};
+ 
+@@ -411,6 +436,38 @@
+ 			<32768>, <32768>;
+ 	};
+ 
++	usb2phy_grf: syscon-usb@ff450000 {
++		compatible = "rockchip,rk3328-usb2phy-grf",
++			     "simple-mfd", "syscon";
++		reg = <0x0 0xff450000 0x0 0x10000>;
++		#address-cells = <1>;
++		#size-cells = <1>;
++
++		u2phy: usb2-phy@100 {
++			compatible = "rockchip,rk3328-usb2phy";
++			reg = <0x100 0x10>;
++			#phy-cells = <1>;
++			status = "disabled";
++
++			u2phy_otg: otg-port {
++				#phy-cells = <0>;
++				interrupts = <GIC_SPI 59 IRQ_TYPE_LEVEL_HIGH>,
++					     <GIC_SPI 60 IRQ_TYPE_LEVEL_HIGH>,
++					     <GIC_SPI 61 IRQ_TYPE_LEVEL_HIGH>;
++				interrupt-names = "otg-bvalid", "otg-id",
++						  "linestate";
++				status = "disabled";
++			};
++
++			u2phy_host: host-port {
++				#phy-cells = <0>;
++				interrupts = <GIC_SPI 62 IRQ_TYPE_LEVEL_HIGH>;
++				interrupt-names = "linestate";
++				status = "disabled";
++			};
++		};
++	};
++
+ 	sdmmc: rksdmmc@ff500000 {
+ 		compatible = "rockchip,rk3328-dw-mshc", "rockchip,rk3288-dw-mshc";
+ 		reg = <0x0 0xff500000 0x0 0x4000>;
+@@ -496,6 +553,17 @@
+ 		clock-names = "biu", "ciu";
+ 		fifo-depth = <0x100>;
+ 		interrupts = <GIC_SPI 4 IRQ_TYPE_LEVEL_HIGH>;
++		status = "disabled";
++	};
++
++	usb_host0_xhci: usb@ff600000 {
++		compatible = "rockchip,rk3328-xhci";
++		reg = <0x0 0xff600000 0x0 0x100000>;
++		interrupts = <GIC_SPI 67 IRQ_TYPE_LEVEL_HIGH>;
++		snps,dis-enblslpm-quirk;
++		snps,phyif-utmi-bits = <16>;
++		snps,dis-u2-freeclk-exists-quirk;
++		snps,dis-u2-susphy-quirk;
+ 		status = "disabled";
+ 	};
+ 
+@@ -1386,7 +1454,7 @@
+ 			};
+ 		};
+ 
+-		gmac2phy {
++		gmac2phy: gmac2phy {
+ 			fephyled_speed100: fephyled-speed100 {
+ 				rockchip,pins =
+ 					<0 31 RK_FUNC_1 &pcfg_pull_none>;
+

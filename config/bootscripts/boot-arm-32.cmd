@@ -3,7 +3,7 @@ setenv loadaddr "0x39000000"
 setenv l_mmc "0 1 2 3"
 for devtype in "usb mmc" ; do
 	if test "${devtype}" = "mmc"; then
-		setenv l_mmc "0"
+		setenv l_mmc "0 1"
 	fi 
 	for devnum in ${l_mmc} ; do
 		if test -e ${devtype} ${devnum} uEnv.txt; then
