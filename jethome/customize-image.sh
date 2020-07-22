@@ -23,12 +23,21 @@ create_deb_packages() {
   done
 }
 
+create_brcm_symlinks() {
+  ln -vs brcmfmac43455-sdio.txt /usr/lib/firmware/brcm/brcmfmac43455-sdio.amlogic,s400.txt
+  ln -vs ../BCM4345C0.hcd /usr/lib/firmware/brcm/BCM4345C0.hcd
+
+  ls -lhA /usr/lib/firmware/brcm/brcmfmac43455-sdio.amlogic,s400.txt
+  ls -lhA /usr/lib/firmware/brcm/BCM4345C0.hcd
+}
+
 Main() {
   case $RELEASE in
     focal)
       if [[ "$LINUXFAMILY" = "arm-64" ]]; then
         if [[ "$BOARD" = "arm-64" ]]; then
           create_deb_packages
+          create_brcm_symlinks
         fi
       fi
       ;;
