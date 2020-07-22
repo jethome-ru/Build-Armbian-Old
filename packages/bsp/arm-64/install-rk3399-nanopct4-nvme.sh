@@ -63,6 +63,10 @@ parted -s "${DEV_EMMC}" mkpart primary fat32 16M 528M
 
 echo "Start update u-boot"
 
+#if [ -f /root/u-boot/u-boot-rk3399/idbloader.bin ] ; then
+#    dd if=/root/u-boot/u-boot-rk3399/idbloader.bin of="${DEV_EMMC}" conv=fsync seek=64
+#fi
+
 if [ -f /root/u-boot/u-boot-rk3399/uboot.img ] ; then
     dd if=/root/u-boot/u-boot-rk3399/uboot.img of="${DEV_EMMC}" conv=fsync seek=16384
 fi
