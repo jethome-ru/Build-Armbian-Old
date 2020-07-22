@@ -31,6 +31,10 @@ create_brcm_symlinks() {
   ls -lhA /usr/lib/firmware/brcm/BCM4345C0.hcd
 }
 
+install_fw_env_config() {
+  cp -fv /tmp/overlay/etc/fw_env.config /etc/
+}
+
 Main() {
   case $RELEASE in
     focal)
@@ -38,6 +42,7 @@ Main() {
         if [[ "$BOARD" = "arm-64" ]]; then
           create_deb_packages
           create_brcm_symlinks
+          install_fw_env_config
         fi
       fi
       ;;

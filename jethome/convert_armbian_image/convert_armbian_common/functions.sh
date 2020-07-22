@@ -1,7 +1,5 @@
 #/bin/bash
 
-FW_ENV_CONFIG=fw_env.config
-
 # example: "--VAR==7"
 print_var() {
   if [ -n "$1" ] ; then
@@ -49,19 +47,6 @@ repack_boot_partition() {
     cp -v $SRC_DTB_NAME $TMP_DIR/dtb/amlogic/$DST_DTB_NAME
     umount -v $TMP_DIR/
     rm -rv $TMP_DIR/
-  else
-    echo "${FUNCNAME[0]}(): Null parameter passed to this function"
-  fi
-}
-
-repack_rootfs_partition() {
-  if [[ -n "$1" ]] ; then
-    print_cmd_title "Repacking $1 to add $FW_ENV_CONFIG ..."
-    local TMP_DIR=$(mktemp -d -t armbian-mnt-XXXXXXXXXX)
-    mount -v -o loop,rw $1 $TMP_DIR
-    cp -v $FW_ENV_CONFIG $TMP_DIR/etc/
-    umount -v $TMP_DIR
-    rm -rv $TMP_DIR
   else
     echo "${FUNCNAME[0]}(): Null parameter passed to this function"
   fi

@@ -42,10 +42,6 @@ extract_partition "ROOTFS" "$INPUT_IMG" "$ROOTFS_PARTITION_START" "$ROOTFS_PARTI
 
 echo
 
-repack_rootfs_partition "$DATA_IMG"
-
-echo
-
 shrink_rootfs_partition "$DATA_IMG"
 
 echo
