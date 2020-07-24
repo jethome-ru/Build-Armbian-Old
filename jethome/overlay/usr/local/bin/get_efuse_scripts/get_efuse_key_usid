@@ -1,0 +1,7 @@
+#!/bin/bash
+USID=$(get_efuse_raw_key usid | tr -d '\0')
+
+if [[ -n "${USID}" ]]; then
+  echo $USID
+fi
+

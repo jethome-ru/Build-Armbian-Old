@@ -1,0 +1,8 @@
+#!/bin/bash
+
+MAC=$(get_efuse_raw_key mac)
+
+if ((${#MAC} == 6)); then
+  RESULT=$(get_efuse_raw_key mac | hexdump -v -e '/1 "%02x:"' | head -c 17)
+  echo $RESULT
+fi

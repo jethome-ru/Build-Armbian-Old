@@ -1,0 +1,50 @@
+#!/bin/bash
+
+I=${0##*/}
+
+if [[ "$#" != 1 ]]; then
+  echo "Script to get raw efuse key value."
+  echo
+  echo "Usage: $I <key>"
+  echo
+  echo "  example 1:"
+  echo "$I usid | hexdump -C"
+  echo "  output:"
+  echo "00000000  73 36 30 35 5f 5f 30 35  30 34 31 39 30 39 67 63  |s605__05041909gc|"
+  echo "00000010  30 30 30 30 39 30 30 34  33 35 34 66 00 00 00 00  |00009004354f....|"
+  echo "00000020"
+  echo
+  echo "  example 2:"
+  echo "$I mac | hexdump -C"
+  echo "  output:"
+  echo "00000000  10 27 be 15 1a 24                                 |.'...$|"
+  echo "00000006"
+
+  exit
+fi
+
+EFUSEKEY="$1"
+
+if [[ -n "EFUSEKEY" ]]; then
+  EFUSEKEY_DTS_NODE=$(find /sys/firmware/devicetree/base/efusekey -name "*key_*" -exec bash -c 'KEYNAME=$(<$1/keyname) && if [[ "$KEYNAME" == "$0" ]]; then echo $1; fi' "$EFUSEKEY" {} \; 2>&-)
+  if [[ -n "$EFUSEKEY_DTS_NODE" ]]; then
+
+    OFFSET=$((16#$(xxd -p $EFUSEKEY_DTS_NODE/offset)))
+    SIZE=$((16#$(xxd -p $EFUSEKEY_DTS_NODE/size)))
+    TMPFILE=$(mktemp /tmp/get_usid.XXXXXX) >/dev/null 2>&1
+
+    if [[ -n "$TMPFILE" && -n "$OFFSET" && -n "$SIZE" ]] && (($SIZE > 0)); then
+
+      dd if=/sys/devices/platform/efuse/efuse0/nvmem of=$TMPFILE >/dev/null  2>&1
+
+      if (( $(stat --printf="%s" $TMPFILE) > 0 )); then
+        dd bs=1c skip=$OFFSET count=$SIZE if=$TMPFILE of=${TMPFILE}_ >/dev/null 2>&1
+        cat ${TMPFILE}_
+      fi
+
+    fi
+
+    rm -f $TMPFILE >/dev/null 2>&1
+  fi
+fi
+
