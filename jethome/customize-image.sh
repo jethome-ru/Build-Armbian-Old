@@ -61,6 +61,11 @@ compile_get_efuse_utilities() {
   g++ -Wall -Wextra -std=c++17 /tmp/overlay/usr/local/bin/get_efuse/${GET_EFUSE}${KEY_USID}.cpp -o /usr/local/bin/${GET_EFUSE}${KEY_USID}
 }
 
+compile_get_cpuid() {
+  local GET_CPUID=get_cpuid
+  g++ -Wall -Wextra -std=c++17 /tmp/overlay/usr/local/bin/$GET_CPUID.cpp -o /usr/local/bin/$GET_CPUID
+}
+
 Main() {
   case $RELEASE in
     focal)
@@ -70,6 +75,7 @@ Main() {
           create_brcm_symlinks
           install_fw_env_config_generator
           compile_get_efuse_utilities
+          compile_get_cpuid
         fi
       fi
       ;;
