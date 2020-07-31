@@ -152,7 +152,15 @@ do_resize_crypt()
 do_expand_ext4()
 {
 	echo -e "\n### [resize2fs] Start resizing ext4 partition $1 now\n" >> ${Log}
-	resize2fs ${rootpart} >> ${Log} 2>&1
+	if [[ -n "$IS_MMC" ]]; then
+		local rootdevice=$(lsblk -n -o PKNAME $rootpart | head -1) # i.e. mmcblk0
+		[[ -z $rootdevice ]] && rootdevice=$(echo $rootpart | sed -e "s/^\/dev\///" | sed "s/p.*//")
+		local rootdevicepath="/dev/$rootdevice" # i.e. /dev/mmcblk0
+		local rootpartdevice=${rootpart##*/}
+		local partitions=${rootpartdevice/${rootdevice}p/}
+		local partsize=$(fdisk $rootdevicepath -l | egrep "${rootdevice}p${partitions}" | awk '{print $4}')s
+	fi
+	resize2fs ${rootpart} $partsize >> ${Log} 2>&1
 }
 
 do_expand_btrfs()
@@ -178,10 +186,15 @@ case "$1" in
 
 		rootfstype=$(findmnt -n -o FSTYPE /)
 		rootpart=$(findmnt -n -o SOURCE /) # i.e. /dev/mmcblk0p1
+
+		IS_MMC=$(echo $rootpart | grep mmc)
+
 		case ${rootfstype} in
 			ext4)
 				# first stage - resize the rootfs partition
-				[[ ! -f /var/lib/armbian/resize_second_stage ]] && do_expand_partition ${rootfstype}
+				if [[ -z "$IS_MMC" ]]; then
+					[[ ! -f /var/lib/armbian/resize_second_stage ]] && do_expand_partition ${rootfstype}
+				fi
 				# second stage - resize the filesystem
 				[[ ! -f /var/run/resize2fs-reboot ]] && do_expand_ext4 ${rootpart}
 				;;

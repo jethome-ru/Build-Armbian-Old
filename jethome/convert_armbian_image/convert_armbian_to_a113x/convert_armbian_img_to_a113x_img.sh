@@ -42,9 +42,9 @@ extract_partition "ROOTFS" "$INPUT_IMG" "$ROOTFS_PARTITION_START" "$ROOTFS_PARTI
 
 echo
 
-shrink_rootfs_partition "$DATA_IMG"
+# shrink_rootfs_partition "$DATA_IMG"
 
-echo
+# echo
 
 print_cmd_title "Packing $OUTPUT_IMG ..."
 ./aml_image_v2_packer -r image.cfg ./ $OUTPUT_IMG
