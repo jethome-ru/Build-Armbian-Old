@@ -52,8 +52,8 @@ dd if="${DEV_EMMC}" of=/root/u-boot-default-rk3288.img bs=1M count=16
 
 dd if=/dev/zero of="${DEV_EMMC}" bs=512 count=1
 
-dd if=/root/u-boot-default-rk3328.img of="${DEV_EMMC}" bs=1 count=442
-dd if=/root/u-boot-default-rk3328.img of="${DEV_EMMC}" bs=512 skip=1 seek=1
+dd if=/root/u-boot-default-rk3288.img of="${DEV_EMMC}" bs=1 count=442
+dd if=/root/u-boot-default-rk3288.img of="${DEV_EMMC}" bs=512 skip=1 seek=1
 
 echo "Start create MBR and partittion"
 
@@ -63,8 +63,8 @@ parted -s "${DEV_EMMC}" mkpart primary ext4 529M 100%
 
 echo "Start update u-boot"
 
-if [ -f /root/u-boot/u-boot-rk3328/idbloader.bin ] ; then
-    dd if=/root/u-boot/u-boot-rk3328/idbloader.bin of="${DEV_EMMC}" conv=fsync seek=64
+if [ -f /root/u-boot/u-boot-rk3288/idbloader.bin ] ; then
+    dd if=/root/u-boot/u-boot-rk3288/idbloader.bin of="${DEV_EMMC}" conv=fsync seek=64
 fi
 
 if [ -f /root/u-boot/u-boot-rk3288/uboot.img ] ; then
@@ -148,8 +148,8 @@ echo "Copy HOME"
 tar -cf - home | (cd $DIR_INSTALL; tar -xpf -)
 echo "Copy LIB"
 tar -cf - lib | (cd $DIR_INSTALL; tar -xpf -)
-echo "Copy LIB64"
-tar -cf - lib64 | (cd $DIR_INSTALL; tar -xpf -)
+#echo "Copy LIB64"
+#tar -cf - lib64 | (cd $DIR_INSTALL; tar -xpf -)
 echo "Create MEDIA"
 mkdir -p $DIR_INSTALL/media
 #tar -cf - media | (cd $DIR_INSTALL; tar -xpf -)

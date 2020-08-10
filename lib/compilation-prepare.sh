@@ -20,12 +20,12 @@ compilation_prepare()
 	# Maintaining one from central location starting with 5.3+
 	# Temporally set for new "default->legacy,next->current" family naming
 
-	if linux-version compare "${version}" ge 5.6 ; then
+	if linux-version compare "${version}" ge 5.6; then
 		display_alert "Adjusting" "packaging" "info"
 		cd "${SRC}/cache/sources/${LINUXSOURCEDIR}" || exit
 		process_patch_file "${SRC}/patch/misc/general-packaging-5.6.y.patch" "applying"
 	else
-		if linux-version compare "${version}" ge 5.3 ; then
+		if linux-version compare "${version}" ge 5.3; then
 			display_alert "Adjusting" "packaging" "info"
 			cd "${SRC}/cache/sources/${LINUXSOURCEDIR}" || exit
 			process_patch_file "${SRC}/patch/misc/general-packaging-5.3.y.patch" "applying"
@@ -97,7 +97,7 @@ compilation_prepare()
 	# mac80211 wireless driver injection features from Kali Linux
 	#
 
-	if linux-version compare "${version}" ge 5.4 && [[ "$EXTRAWIFI" == yes ]]; then
+	if linux-version compare "${version}" ge 5.4 && [ $EXTRAWIFI == yes ]; then
 
 		display_alert "Adding" "Wireless package injections for mac80211 compatible chipsets" "info"
 		process_patch_file "${SRC}/patch/misc/kali-wifi-injection-1.patch" "applying"
@@ -178,7 +178,7 @@ compilation_prepare()
 
 	# Updated USB network drivers for RTL8152/RTL8153 based dongles that also support 2.5Gbs variants
 
-	if linux-version compare "${version}" ge 5.4 && [[ "$EXTRAWIFI" == yes ]]; then
+	if linux-version compare "${version}" ge 5.4 && [ $LINUXFAMILY != mvebu64 ] && [ $LINUXFAMILY != rk322x ] && [ $LINUXFAMILY != odroidxu4 ] && [ $EXTRAWIFI == yes ]; then
 
 		# attach to specifics tag or branch
 		local rtl8152ver="branch:master"
@@ -260,6 +260,8 @@ compilation_prepare()
 
 		# attach to specifics tag or branch
 		local rtl8812auver="branch:v5.6.4.2"
+		# temporally override
+		local rtl8812auver="commit:058ef814b8e27639fdf10b03cac1a1d8e41c6777"
 
 		display_alert "Adding" "Wireless drivers for Realtek 8811, 8812, 8814 and 8821 chipsets ${rtl8812auver}" "info"
 
@@ -594,6 +596,12 @@ compilation_prepare()
 		process_patch_file "${SRC}/patch/misc/wireless-rtl8822bs.patch"                "applying"
 		process_patch_file "${SRC}/patch/misc/wireless-rtl8822bs-1.patch"                "applying"
 
+	fi
+
+
+	if linux-version compare $version ge 4.4 && linux-version compare $version lt 5.8; then
+		display_alert "Adjustin" "Framebuffer driver for ST7789 IPS display" "info"
+		process_patch_file "${SRC}/patch/misc/fbtft-st7789v-invert-color.patch" "applying"
 	fi
 
 }
