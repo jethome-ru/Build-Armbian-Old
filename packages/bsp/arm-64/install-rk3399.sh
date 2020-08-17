@@ -58,8 +58,8 @@ dd if=/root/u-boot-default-rk3399.img of="${DEV_EMMC}" bs=512 skip=1 seek=1
 echo "Start create MBR and partittion"
 
 parted -s "${DEV_EMMC}" mklabel msdos
-parted -s "${DEV_EMMC}" mkpart primary fat32 16M 528M
-parted -s "${DEV_EMMC}" mkpart primary ext4 529M 100%
+parted -s "${DEV_EMMC}" mkpart primary fat32 16M 532M
+parted -s "${DEV_EMMC}" mkpart primary ext4 533M 100%
 
 echo "Start update u-boot"
 
@@ -109,13 +109,13 @@ echo "done."
 
 echo -n "Edit init config..."
 sed -e "s/ROOTFS/ROOT_EMMC/g" \
- -i "$DIR_INSTALL/uEnv.txt"
+ -i "$DIR_INSTALL/extlinux/extlinux.conf"
 echo "done."
 
 rm $DIR_INSTALL/s9*
 rm $DIR_INSTALL/aml*
 rm $DIR_INSTALL/boot.ini
-mv -f $DIR_INSTALL/boot-emmc.scr $DIR_INSTALL/boot.scr
+#mv -f $DIR_INSTALL/boot-emmc.scr $DIR_INSTALL/boot.scr
 
 umount $DIR_INSTALL
 

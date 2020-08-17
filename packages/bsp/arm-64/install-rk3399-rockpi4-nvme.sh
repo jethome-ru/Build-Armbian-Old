@@ -40,13 +40,13 @@ echo "done."
 
 echo -n "Edit init config..."
 sed -e "s/ROOTFS/ROOT_NVME/g" \
- -i "$DIR_INSTALL/uEnv.txt"
+ -i "$DIR_INSTALL/extlinux/extlinux.conf"
 echo "done."
 
 rm $DIR_INSTALL/s9*
 rm $DIR_INSTALL/aml*
 rm $DIR_INSTALL/boot.ini
-mv -f $DIR_INSTALL/boot-emmc.scr $DIR_INSTALL/boot.scr
+#mv -f $DIR_INSTALL/boot-emmc.scr $DIR_INSTALL/boot.scr
 
 umount $DIR_INSTALL
 

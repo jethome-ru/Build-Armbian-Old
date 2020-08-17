@@ -42,6 +42,7 @@ if [[ $ADD_UBOOT == yes ]]; then
 
 	display_alert "Compiling ATF" "" "info"
 
+# build aarch64
   if [[ $(dpkg --print-architecture) == amd64 ]]; then
 
 	local toolchain
@@ -56,6 +57,7 @@ if [[ $ADD_UBOOT == yes ]]; then
 		[[ -z $toolchain2 ]] && exit_with_error "Could not find required toolchain" "${toolchain2_type}gcc $toolchain2_ver"
 	fi
 
+# build aarch64
   fi
 
 	display_alert "Compiler version" "${ATF_COMPILER}gcc $(eval env PATH="${toolchain}:${PATH}" "${ATF_COMPILER}gcc" -dumpversion)" "info"
@@ -135,6 +137,7 @@ if [[ $ADD_UBOOT == yes ]]; then
 
 	display_alert "Compiling u-boot" "$version" "info"
 
+# build aarch64
   if [[ $(dpkg --print-architecture) == amd64 ]]; then
 
 	local toolchain
@@ -149,6 +152,7 @@ if [[ $ADD_UBOOT == yes ]]; then
 		[[ -z $toolchain2 ]] && exit_with_error "Could not find required toolchain" "${toolchain2_type}gcc $toolchain2_ver"
 	fi
 
+# build aarch64
   fi
 
 	display_alert "Compiler version" "${UBOOT_COMPILER}gcc $(eval env PATH="${toolchain}:${toolchain2}:${PATH}" "${UBOOT_COMPILER}gcc" -dumpversion)" "info"
@@ -166,12 +170,9 @@ if [[ $ADD_UBOOT == yes ]]; then
 		target_patchdir=$(cut -d';' -f2 <<< "${target}")
 		target_files=$(cut -d';' -f3 <<< "${target}")
 
-		# only checkout when we go several times over the source
-		if [[ $target_cycles -ge 1 ]]; then
-			display_alert "Checking out to clean sources"
-			git checkout -f -q HEAD
-		fi
-		target_cycles=$((target_cycles+1))
+		# needed for multiple targets and for calling compile_uboot directly
+		display_alert "Checking out to clean sources"
+		git checkout -f -q HEAD
 
 		if [[ $CLEAN_LEVEL == *make* ]]; then
 			display_alert "Cleaning" "$BOOTSOURCEDIR" "info"
@@ -352,12 +353,14 @@ compile_kernel()
 
 	display_alert "Compiling $BRANCH kernel" "$version" "info"
 
+# build aarch64
   if [[ $(dpkg --print-architecture) == amd64 ]]; then
 
 	local toolchain
 	toolchain=$(find_toolchain "$KERNEL_COMPILER" "$KERNEL_USE_GCC")
 	[[ -z $toolchain ]] && exit_with_error "Could not find required toolchain" "${KERNEL_COMPILER}gcc $KERNEL_USE_GCC"
 
+# build aarch64
   fi
 
 	display_alert "Compiler version" "${KERNEL_COMPILER}gcc $(eval env PATH="${toolchain}:${PATH}" "${KERNEL_COMPILER}gcc" -dumpversion)" "info"
@@ -560,7 +563,7 @@ compile_armbian-config()
 	Architecture: all
 	Maintainer: $MAINTAINER <$MAINTAINERMAIL>
 	Replaces: armbian-bsp
-	Depends: bash, iperf3, psmisc, curl, bc, expect, dialog, iptables, resolvconf, pv, \
+	Depends: bash, iperf3, psmisc, curl, bc, expect, dialog, pv, \
 	debconf-utils, unzip, build-essential, html2text, apt-transport-https, html2text, dirmngr, software-properties-common
 	Recommends: armbian-bsp
 	Suggests: libpam-google-authenticator, qrencode, network-manager, sunxi-tools
