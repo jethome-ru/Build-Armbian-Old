@@ -18,7 +18,16 @@ mkdir -pv $USERPATCHES_SOURCES_FAMILIES
 mkdir -pv $USERPATCHES_OVERLAY
 
 rm -fv $USERPATCHES_KERNEL_ARM_64/*
-rm -frv $USERPATCHES_OVERLAY/*
+
+RM_USERPATCHES_OVERLAY="rm -frv $USERPATCHES_OVERLAY/*"
+
+if [[ "${EUID}" == "0" ]]; then
+	$RM_USERPATCHES_OVERLAY
+elif grep -q "$(whoami)" <(getent group docker); then
+	$RM_USERPATCHES_OVERLAY
+else
+	sudo $RM_USERPATCHES_OVERLAY
+fi
 
 cp -fv $JETHOME/patch/kernel/arm-64-current/* $USERPATCHES_KERNEL_ARM_64/
 cp -fv $JETHOME/patch/sources/families/arm-64.conf $USERPATCHES_SOURCES_FAMILIES/
