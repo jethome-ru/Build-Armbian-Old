@@ -1,10 +1,10 @@
-diff --git a/arch/arm64/boot/dts/amlogic/meson-gxl-s905x-p212.dts b/arch/arm64/boot/dts/amlogic/meson-gxl-s905x-p212.dts
+diff --git a/arch/arm64/boot/dts/amlogic/jethome-j80-v1.dts b/arch/arm64/boot/dts/amlogic/jethome-j80-v1.dts
 index 2602940c2..86c8f84ec 100644
---- a/arch/arm64/boot/dts/amlogic/meson-gxl-s905x-p212.dts
-+++ b/arch/arm64/boot/dts/amlogic/meson-gxl-s905x-p212.dts
-@@ -32,6 +32,35 @@ hdmi_connector_in: endpoint {
- 			};
- 		};
+--- a/arch/arm64/boot/dts/amlogic/jethome-j80-v1.dts
++++ b/arch/arm64/boot/dts/amlogic/jethome-j80-v1.dts
+@@ -19,4 +19,33 @@ memory@0 {
+ 		device_type = "memory";
+ 		reg = <0x0 0x0 0x0 0x40000000>;
  	};
 +
 +	// It is necessary only as key map to read efuse values from nvmem from Armbian OS.
@@ -36,12 +36,10 @@ index 2602940c2..86c8f84ec 100644
 +		};
 +	};
  };
- 
- &cec_AO {
-diff --git a/arch/arm64/boot/dts/amlogic/meson-axg-s400.dts b/arch/arm64/boot/dts/amlogic/meson-axg-s400.dts
+diff --git a/arch/arm64/boot/dts/amlogic/jethome-j100-v1.dts b/arch/arm64/boot/dts/amlogic/jethome-j100-v1.dts
 index 1ee7439b9..bdd671acc 100644
---- a/arch/arm64/boot/dts/amlogic/meson-axg-s400.dts
-+++ b/arch/arm64/boot/dts/amlogic/meson-axg-s400.dts
+--- a/arch/arm64/boot/dts/amlogic/jethome-j100-v1.dts
++++ b/arch/arm64/boot/dts/amlogic/jethome-j100-v1.dts
 @@ -279,6 +279,35 @@ data:data
  		};
  	};

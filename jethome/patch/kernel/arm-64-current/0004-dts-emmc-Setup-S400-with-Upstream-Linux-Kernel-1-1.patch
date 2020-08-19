@@ -16,14 +16,14 @@ s400
 Change-Id: Id77540fdbfe00e0e3b11426b4327d5a024c0acab
 Signed-off-by: Hanjie Lin <hanjie.lin@amlogic.com>
 ---
- .../arm64/boot/dts/amlogic/meson-axg-s400.dts | 99 ++++++++++++++++++-
+ .../arm64/boot/dts/amlogic/jethome-j100-v1.dts | 99 ++++++++++++++++++-
  arch/arm64/boot/dts/amlogic/meson-axg.dtsi    |  2 +-
  2 files changed, 99 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/amlogic/meson-axg-s400.dts b/arch/arm64/boot/dts/amlogic/meson-axg-s400.dts
+diff --git a/arch/arm64/boot/dts/amlogic/jethome-j100-v1.dts b/arch/arm64/boot/dts/amlogic/jethome-j100-v1.dts
 index 75fe1a2c49d0..f0a8c053967c 100644
---- a/arch/arm64/boot/dts/amlogic/meson-axg-s400.dts
-+++ b/arch/arm64/boot/dts/amlogic/meson-axg-s400.dts
+--- a/arch/arm64/boot/dts/amlogic/jethome-j100-v1.dts
++++ b/arch/arm64/boot/dts/amlogic/jethome-j100-v1.dts
 @@ -358,6 +358,103 @@
  		clock-frequency = <32768>;
  		pwms = <&pwm_ab 0 30518 0>; /* PWM_A at 32.768KHz */
