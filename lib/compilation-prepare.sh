@@ -193,6 +193,23 @@ compilation_prepare()
 
 
 
+	# JetHome DTS files
+	display_alert "Adding" "JetHome DTS files" "info"
+	local jethome_j80_line='dtb-$(CONFIG_ARCH_MESON) += jethome-j80-v1.dtb'
+	local jethome_j100_line='dtb-$(CONFIG_ARCH_MESON) += jethome-j100-v1.dtb'
+	local boot_dts_makefile="${SRC}/cache/sources/${LINUXSOURCEDIR}/arch/arm64/boot/dts/amlogic/Makefile"
+	cp -fv "${SRC}/jethome/patch/kernel/arm-64-current"/jethome-j{80,100}-v1.dts \
+	"${SRC}/cache/sources/${LINUXSOURCEDIR}/arch/arm64/boot/dts/amlogic/"
+	if ! grep "$jethome_j80_line" $boot_dts_makefile; then
+		echo $jethome_j80_line >> $boot_dts_makefile
+	fi
+	if ! grep "$jethome_j100_line" $boot_dts_makefile; then
+		echo $jethome_j100_line >> $boot_dts_makefile
+	fi
+
+
+
+
 	# Wireless drivers for Realtek 88x2CS chipsets
 
 	if linux-version compare "${version}" ge 3.14 && [ "$EXTRAWIFI" == yes ]; then
