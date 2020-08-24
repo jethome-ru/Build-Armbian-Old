@@ -75,7 +75,7 @@ compilation_prepare()
 	# Linux splah file
 	#
 
-	if linux-version compare "${version}" ge 5.4; then
+	if linux-version compare "${version}" le 5.8; then
 
 		display_alert "Adding" "Kernel splash file" "info"
 		process_patch_file "${SRC}/patch/misc/0001-bootsplash.patch" "applying"
