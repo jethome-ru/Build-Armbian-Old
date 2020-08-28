@@ -10,7 +10,7 @@ set -u # Treat unset variables and parameters as an error
 I=$(self_name)
 
 if [[ $# != 2 ]]; then
-  a113x_usage "$I"
+  j100_usage "$I"
 fi
 
 INPUT_FILE=$1

@@ -36,7 +36,8 @@ cp -fv $JETHOME/customize-image.sh $USERPATCHES/
 cp -fv $JETHOME/lib.config $USERPATCHES/
 
 ./compile.sh docker \
-BUILD_KSRC=yes \
+CLEAN_LEVEL="make,debs" \
+BUILD_KSRC=no \
 BOARD=arm-64 \
 BRANCH=current \
 RELEASE=focal \

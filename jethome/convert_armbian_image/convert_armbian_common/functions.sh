@@ -137,15 +137,15 @@ detect_partitions() {
   fi
 }
 
-a113x_usage() {
+j100_usage() {
   if [[ -n "$1" ]] ; then
-    echo "Script to convert Armbian* img to A113X img"
+    echo "Script to convert Armbian* img to j100 img"
     echo
     echo "Usage: $1 <armbian_img_or_xz> <output_img>"
     echo
     echo "examples:"
-    echo "  1) $1 Armbian_20.05.5_Arm-64_bionic_current_5.7.0-rc7.img.xz a113x_armbian.img"
-    echo "  2) $1 Armbian_20.05.5_Arm-64_bionic_current_5.7.0-rc7.img    a113x_armbian.img"
+    echo "  1) $1 Armbian_20.05.5_Arm-64_bionic_current_5.7.0-rc7.img.xz j100_armbian.img"
+    echo "  2) $1 Armbian_20.05.5_Arm-64_bionic_current_5.7.0-rc7.img    j100_armbian.img"
     echo
     echo
     echo

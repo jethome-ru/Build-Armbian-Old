@@ -133,10 +133,10 @@ build_jethome_uboot_deb()
 	# read uboot version
 	local version
 	local version_j80
-	version_j80=$(get_jethome_uboot_version "convert_armbian_to_s905w/BOOTLOADER")
+	version_j80=$(get_jethome_uboot_version "convert_armbian_to_j80/BOOTLOADER")
 	[[ -z "$version_j80" ]] && exit_with_error "version_j80 is empty"
 	local version_j100
-	version_j100=$(get_jethome_uboot_version "convert_armbian_to_a113x")
+	version_j100=$(get_jethome_uboot_version "convert_armbian_to_j100")
 	[[ -z "$version_j100" ]] && exit_with_error "version_j100 is empty"
 	version=jethome-j80=$version_j80,jethome-j100=$version_j100
 
@@ -145,8 +145,8 @@ build_jethome_uboot_deb()
 	rm -rf $SRC/.tmp/$uboot_name
 	mkdir -p $SRC/.tmp/$uboot_name/usr/lib/{u-boot,$uboot_name} $SRC/.tmp/$uboot_name/DEBIAN
 
-	cp -v "$SRC/jethome/convert_armbian_image/convert_armbian_to_s905w/BOOTLOADER/bootloader" "${SRC}/.tmp/${uboot_name}/usr/lib/${uboot_name}"/u-boot-jethome_armbian_j80_v1.bin
-	cp -v "$SRC/jethome/convert_armbian_image/convert_armbian_to_a113x/bootloader.PARTITION" "${SRC}/.tmp/${uboot_name}/usr/lib/${uboot_name}"/u-boot-jethome_armbian_j100_v1.bin
+	cp -v "$SRC/jethome/convert_armbian_image/convert_armbian_to_j80/BOOTLOADER/bootloader" "${SRC}/.tmp/${uboot_name}/usr/lib/${uboot_name}"/u-boot-jethome_armbian_j80_v1.bin
+	cp -v "$SRC/jethome/convert_armbian_image/convert_armbian_to_j100/bootloader.PARTITION" "${SRC}/.tmp/${uboot_name}/usr/lib/${uboot_name}"/u-boot-jethome_armbian_j100_v1.bin
 
 	# declare -f on non-defined function does not do anything
 	cat <<-EOF > "${SRC}/.tmp/${uboot_name}/usr/lib/u-boot/platform_install.sh"

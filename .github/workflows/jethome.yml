@@ -27,7 +27,7 @@ jobs:
 
     # Runs a single command using the runners shell
     - name: Run a one-line script
-      run: ./compile_and_convert_to_s905w_and_a113x.sh
+      run: ./compile_and_convert_to_jXXX.sh
 
     - name: Archive img artifacts
       uses: actions/upload-artifact@v2
