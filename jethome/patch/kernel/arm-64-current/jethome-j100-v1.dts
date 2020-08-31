@@ -317,6 +317,7 @@
 	phy-handle = <&eth_phy0>;
 	phy-mode = "rmii";
 	internal_phy=<0>;
+	interrupts = <GIC_SPI 8 1>;
 
 	mdio {
 		compatible = "snps,dwmac-mdio";
@@ -486,4 +487,8 @@
 
 &spicc1 {
 	status = "okay";
+};
+
+&audio {
+	status = "disabled";
 };
