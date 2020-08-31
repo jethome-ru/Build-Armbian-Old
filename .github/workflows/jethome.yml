@@ -25,18 +25,14 @@ jobs:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
 
-    # Runs a single command using the runners shell
+    # Compile
     - name: Run a one-line script
       run: ./compile_and_convert_to_jXXX.sh
 
-    - name: Archive img artifacts
-      uses: actions/upload-artifact@v2
-      with:
-        name: images
-        path: output/images
-
-    - name: Archive deb artifacts
-      uses: actions/upload-artifact@v2
-      with:
-        name: deb
-        path: output/debs
+    - name: Upload img J100
+      run: |
+       rsync -a output/images/Armbian_*_j100.img repo@update.jethome.ru:/var/www/update.jethome.ru/armbian/ || true
+       rsync -a output/images/Armbian_*_j80.img repo@update.jethome.ru:/var/www/update.jethome.ru/armbian/ || true
+       
+    - name: Upload deb to repo
+      run: rsync -ar --delete-before output/debs/ repo@update.jethome.ru:~/beta/ || true
