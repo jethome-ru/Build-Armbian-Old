@@ -97,7 +97,7 @@ install_common()
 
 	# disable selinux by default
 	mkdir -p "${SDCARD}"/selinux
-	[[ -f "${SDCARD}"/etc/selinux/default ]] && sed "s/^SELINUX=.*/SELINUX=disabled/" -i "${SDCARD}"/etc/selinux/default
+	[[ -f "${SDCARD}"/etc/selinux/config ]] && sed "s/^SELINUX=.*/SELINUX=disabled/" -i "${SDCARD}"/etc/selinux/config
 
 	# remove Ubuntu's legal text
 	[[ -f "${SDCARD}"/etc/legal ]] && rm "${SDCARD}"/etc/legal
@@ -127,12 +127,26 @@ install_common()
 	# set root password
 	chroot "${SDCARD}" /bin/bash -c "(echo $ROOTPWD;echo $ROOTPWD;) | passwd root >/dev/null 2>&1"
 
+	# enable automated login to console(s)
+	mkdir -p "${SDCARD}"/etc/systemd/system/getty@.service.d/
+	mkdir -p "${SDCARD}"/etc/systemd/system/serial-getty@.service.d/
+	cat <<-EOF > "${SDCARD}"/etc/systemd/system/serial-getty@.service.d/override.conf
+	[Service]
+	ExecStartPre=/bin/sh -c 'exec /bin/sleep 10'
+	ExecStart=
+	ExecStart=-/sbin/agetty --noissue --autologin root %I $TERM
+	After=graphical.target
+	Type=idle
+	EOF
+	cp "${SDCARD}"/etc/systemd/system/serial-getty@.service.d/override.conf "${SDCARD}"/etc/systemd/system/getty@.service.d/override.conf
+
 	# force change root password at first login
-	chroot "${SDCARD}" /bin/bash -c "chage -d 0 root"
+	#chroot "${SDCARD}" /bin/bash -c "chage -d 0 root"
 
 	# change console welcome text
 	echo -e "Armbian ${REVISION} ${RELEASE^} \\l \n" > "${SDCARD}"/etc/issue
 	echo "Armbian ${REVISION} ${RELEASE^}" > "${SDCARD}"/etc/issue.net
+	sed -i "s/^PRETTY_NAME=.*/PRETTY_NAME=\"Armbian $REVISION "${RELEASE^}"\"/" "${SDCARD}"/etc/os-release
 
 	# enable few bash aliases enabled in Ubuntu by default to make it even
 	sed "s/#alias ll='ls -l'/alias ll='ls -l'/" -i "${SDCARD}"/etc/skel/.bashrc
@@ -197,6 +211,30 @@ install_common()
 	ff02::2     ip6-allrouters
 	EOF
 
+	if [[ -n "${REPOSITORY_INSTALL}" ]]; then
+		chroot "${SDCARD}" /bin/bash -c "apt-get update"
+	fi
+
+	# install family packages
+	if [[ -n ${PACKAGE_LIST_FAMILY} ]]; then
+		chroot "${SDCARD}" /bin/bash -c "DEBIAN_FRONTEND=noninteractive  apt -yqq --no-install-recommends install $PACKAGE_LIST_FAMILY" >> "${DEST}"/debug/install.log
+	fi
+
+	# install board packages
+	if [[ -n ${PACKAGE_LIST_BOARD} ]]; then
+		chroot "${SDCARD}" /bin/bash -c "DEBIAN_FRONTEND=noninteractive  apt -yqq --no-install-recommends install $PACKAGE_LIST_BOARD" >> "${DEST}"/debug/install.log
+	fi
+
+	# remove family packages
+	if [[ -n ${PACKAGE_LIST_FAMILY_REMOVE} ]]; then
+		chroot "${SDCARD}" /bin/bash -c "DEBIAN_FRONTEND=noninteractive  apt -yqq remove --auto-remove $PACKAGE_LIST_FAMILY_REMOVE" >> "${DEST}"/debug/install.log
+	fi
+
+	# remove board packages
+	if [[ -n ${PACKAGE_LIST_BOARD_REMOVE} ]]; then
+		chroot "${SDCARD}" /bin/bash -c "DEBIAN_FRONTEND=noninteractive  apt -yqq remove --auto-remove $PACKAGE_LIST_BOARD_REMOVE" >> "${DEST}"/debug/install.log
+	fi
+
 	# install u-boot
 	if [[ "${REPOSITORY_INSTALL}" != *u-boot* ]]; then
 		UBOOT_VER=$(dpkg --info "${DEB_STORAGE}/${CHOSEN_UBOOT}_${REVISION}_${ARCH}.deb" | grep Descr | awk '{print $(NF)}')
@@ -204,9 +242,10 @@ install_common()
 	else
 		UBOOT_VER=$(chroot "${SDCARD}" /bin/bash -c "apt-cache --names-only search ^linux-u-boot-${BOARD}-${BRANCH} | awk '{print \$(NF)}'")
 		display_alert "Installing from repository" "linux-u-boot-${BOARD}-${BRANCH} $UBOOT_VER"
-		chroot "${SDCARD}" /bin/bash -c "apt-get -y -qq install linux-u-boot-${BOARD}-${BRANCH}" >> "${DEST}"/debug/install.log 2>&1
+		chroot "${SDCARD}" /bin/bash -c "apt-get -qq -y install linux-u-boot-${BOARD}-${BRANCH}" >> "${DEST}"/debug/install.log 2>&1
 		# we need package later, move to output, apt-get must be here, apt deletes file
-		mv "${SDCARD}/var/cache/apt/archives/linux-u-boot-${BOARD}-${BRANCH}*_${ARCH}.deb" "${DEB_STORAGE}"
+		UPSTREM_VER=$(dpkg-deb -I "${SDCARD}"/var/cache/apt/archives/linux-u-boot-${BOARD}-${BRANCH}*_${ARCH}.deb | grep Version | awk '{print $(NF)}')
+		mv "${SDCARD}"/var/cache/apt/archives/linux-u-boot-${BOARD}-${BRANCH}*_${ARCH}.deb ${DEB_STORAGE}/${CHOSEN_UBOOT}_${UPSTREM_VER}_${ARCH}.deb
 	fi
 
 	# install kernel
@@ -405,6 +444,9 @@ install_common()
 
 	# remove network manager defaults to handle eth by default
 	rm -f "${SDCARD}"/usr/lib/NetworkManager/conf.d/10-globally-managed-devices.conf
+
+	# most likely we don't need to wait for nm to get online
+	chroot "${SDCARD}" /bin/bash -c "systemctl disable NetworkManager-wait-online.service" >> "${DEST}"/debug/install.log 2>&1
 
 	# avahi daemon defaults if exists
 	[[ -f "${SDCARD}"/usr/share/doc/avahi-daemon/examples/sftp-ssh.service ]] && \

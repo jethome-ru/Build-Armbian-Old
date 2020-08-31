@@ -58,10 +58,14 @@ echo "Start backup u-boot default"
 echo "Start create MBR and partittion"
 
 parted -s "${DEV_EMMC}" mklabel msdos
-parted -s "${DEV_EMMC}" mkpart primary fat32 16M 528M
-parted -s "${DEV_EMMC}" mkpart primary ext4 529M 100%
+parted -s "${DEV_EMMC}" mkpart primary fat32 16M 532M
+parted -s "${DEV_EMMC}" mkpart primary ext4 533M 100%
 
 echo "Start update u-boot"
+
+#if [ -f /root/u-boot/u-boot-rk3399/idbloader.bin ] ; then
+#    dd if=/root/u-boot/u-boot-rk3399/idbloader.bin of="${DEV_EMMC}" conv=fsync seek=64
+#fi
 
 #if [ -f /root/u-boot/u-boot-rk3399/uboot.img ] ; then
 #    dd if=/root/u-boot/u-boot-rk3399/uboot.img of="${DEV_EMMC}" conv=fsync seek=16384
@@ -105,7 +109,7 @@ echo "done."
 
 echo -n "Edit init config..."
 sed -e "s/ROOTFS/ROOT_EMMC/g" \
- -i "$DIR_INSTALL/uEnv.txt"
+ -i "$DIR_INSTALL/extlinux/extlinux.conf"
 echo "done."
 
 rm $DIR_INSTALL/s9*

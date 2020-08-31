@@ -50,6 +50,11 @@ echo "Start backup u-boot default"
 
 dd if="${DEV_EMMC}" of=/root/u-boot-default-aml.img bs=1M count=4
 
+dd if=/dev/zero of="${DEV_EMMC}" bs=512 count=1
+
+#dd if=/root/u-boot-default-aml.img of="${DEV_EMMC}" bs=1 count=442
+#dd if=/root/u-boot-default-aml.img of="${DEV_EMMC}" bs=512 skip=1 seek=1
+
 echo "Start create MBR and partittion"
 
 parted -s "${DEV_EMMC}" mklabel msdos
@@ -95,17 +100,17 @@ echo "done."
 
 echo -n "Edit init config..."
 sed -e "s/ROOTFS/ROOT_EMMC/g" \
- -i "$DIR_INSTALL/uEnv.txt"
+ -i "$DIR_INSTALL/extlinux/extlinux.conf"
 echo "done."
 
 rm $DIR_INSTALL/s9*
 rm $DIR_INSTALL/aml*
 rm $DIR_INSTALL/boot.ini
-mv -f $DIR_INSTALL/boot-emmc.scr $DIR_INSTALL/boot.scr
+#mv -f $DIR_INSTALL/boot-emmc.scr $DIR_INSTALL/boot.scr
 
 if [ -f /boot/u-boot.ext ] ; then
-    mv -f $DIR_INSTALL/u-boot.sd $DIR_INSTALL/u-boot.emmc
-    mv -f $DIR_INSTALL/boot-emmc.ini $DIR_INSTALL/boot.ini
+    mv -f $DIR_INSTALL/u-boot.ext $DIR_INSTALL/u-boot.emmc
+#    mv -f $DIR_INSTALL/boot-emmc.ini $DIR_INSTALL/boot.ini
     sync
 fi
 

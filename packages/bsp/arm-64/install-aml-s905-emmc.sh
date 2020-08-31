@@ -88,7 +88,7 @@ echo "done."
 
 echo -n "Edit init config..."
 sed -e "s/ROOTFS/ROOT_EMMC/g" \
- -i "$DIR_INSTALL/uEnv.txt"
+ -i "$DIR_INSTALL/extlinux/extlinux.conf"
 echo "done."
 
 #rm $DIR_INSTALL/s9*

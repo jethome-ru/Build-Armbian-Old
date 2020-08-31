@@ -58,7 +58,7 @@ dd if=/root/u-boot-default-rk3399.img of="${DEV_EMMC}" bs=512 skip=1 seek=1
 echo "Start create MBR and partittion"
 
 parted -s "${DEV_EMMC}" mklabel msdos
-parted -s "${DEV_EMMC}" mkpart primary fat32 16M 528M
+parted -s "${DEV_EMMC}" mkpart primary fat32 16M 532M
 #parted -s "${DEV_EMMC}" mkpart primary ext4 263M 100%
 
 echo "Start update u-boot"
@@ -76,6 +76,8 @@ if [ -f /root/u-boot/u-boot-rk3399-renegade/trust.bin ] ; then
 fi
 
 echo "Start create MBR and partittion NVMe"
+
+dd if=/dev/zero of=/dev/nvme0n1 bs=512 count=1
 
 parted -s /dev/nvme0n1 mklabel msdos
 parted -s /dev/nvme0n1 mkpart primary ext4 1M 100%
@@ -114,13 +116,13 @@ echo "done."
 
 echo -n "Edit init config..."
 sed -e "s/ROOTFS/ROOT_EMMC/g" \
- -i "$DIR_INSTALL/uEnv.txt"
+ -i "$DIR_INSTALL/extlinux/extlinux.conf"
 echo "done."
 
 rm $DIR_INSTALL/s9*
 rm $DIR_INSTALL/aml*
 rm $DIR_INSTALL/boot.ini
-mv -f $DIR_INSTALL/boot-emmc.scr $DIR_INSTALL/boot.scr
+#mv -f $DIR_INSTALL/boot-emmc.scr $DIR_INSTALL/boot.scr
 
 umount $DIR_INSTALL
 
