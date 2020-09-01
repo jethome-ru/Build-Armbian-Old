@@ -13,7 +13,7 @@
 # daily beta build contains date in subrevision
 #if [[ $BETA == yes && -z $SUBREVISION ]]; then SUBREVISION="."$(date --date="tomorrow" +"%j"); fi
 REVISION=$(cat "${SRC}"/VERSION)"$SUBREVISION" # all boards have same revision
-[[ -z $ROOTPWD ]] && ROOTPWD="1234" # Must be changed @first login
+[[ -z $ROOTPWD ]] && ROOTPWD="jethome80100" # Must be changed @first login
 [[ -z $MAINTAINER ]] && MAINTAINER="Oleg Ivanov" # deb signature
 [[ -z $MAINTAINERMAIL ]] && MAINTAINERMAIL="balbes-150@yandex.ru" # deb signature
 TZDATA=$(cat /etc/timezone) # Timezone for target is taken from host or defined here.
