@@ -175,16 +175,23 @@ create_sources_list()
 	if [[ $DOWNLOAD_MIRROR == "china" ]]; then
 		echo "deb http://mirrors.tuna.tsinghua.edu.cn/armbian $RELEASE main ${RELEASE}-utils ${RELEASE}-desktop" > "${SDCARD}"/etc/apt/sources.list.d/armbian.list
 	else
-		echo "deb http://"$([[ $BETA == yes ]] && echo "beta" || echo "apt" )".armbian.com $RELEASE main ${RELEASE}-utils ${RELEASE}-desktop" > "${SDCARD}"/etc/apt/sources.list.d/armbian.list
+		# echo "deb http://"$([[ $BETA == yes ]] && echo "beta" || echo "apt" )".armbian.com $RELEASE main ${RELEASE}-utils ${RELEASE}-desktop" > "${SDCARD}"/etc/apt/sources.list.d/armbian.list
+		local jethome_release_version=$(get_jethome_release_version)
+		echo "deb http://repo.jethome.ru $RELEASE "$([[ -n "$jethome_release_version" ]] && echo "main" || echo "testing" ) > "${SDCARD}"/etc/apt/sources.list.d/armbian.list
 	fi
 
 	# add local package server if defined. Suitable for development
 	[[ -n $LOCAL_MIRROR ]] && echo "deb http://$LOCAL_MIRROR $RELEASE main ${RELEASE}-utils ${RELEASE}-desktop" >> "${SDCARD}"/etc/apt/sources.list.d/armbian.list
 
-	display_alert "Adding Armbian repository and authentication key" "/etc/apt/sources.list.d/armbian.list" "info"
-	cp "${SRC}"/config/armbian.key "${SDCARD}"
-	chroot "${SDCARD}" /bin/bash -c "cat armbian.key | apt-key add - > /dev/null 2>&1"
-	rm "${SDCARD}"/armbian.key
+	# display_alert "Adding Armbian repository and authentication key" "/etc/apt/sources.list.d/armbian.list" "info"
+	# cp "${SRC}"/config/armbian.key "${SDCARD}"
+	# chroot "${SDCARD}" /bin/bash -c "cat armbian.key | apt-key add - > /dev/null 2>&1"
+	# rm "${SDCARD}"/armbian.key
+
+	display_alert "Adding JetHome repository and authentication key" "/etc/apt/sources.list.d/armbian.list" "info"
+	cp "${SRC}"/config/jethome.gpg.key "${SDCARD}"
+	chroot "${SDCARD}" /bin/bash -c "cat jethome.gpg.key | apt-key add - > /dev/null 2>&1"
+	rm "${SDCARD}"/jethome.gpg.key
 }
 
 # fetch_from_repo <url> <directory> <ref> <ref_subdir>
