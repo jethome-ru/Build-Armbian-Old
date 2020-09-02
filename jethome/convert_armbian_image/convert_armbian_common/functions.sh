@@ -36,6 +36,33 @@ extract_partition() {
   fi
 }
 
+repack_rootfs_partition() {
+  local ARMBIAN_MNT_SUFFIX=armbian-mnt-
+
+  local ARMBIAN_MNTS
+  # workaround for 'set -e' to continue script execution if grep does not match pattern
+  ARMBIAN_MNTS=$(mount | { grep -Po "(?<=on )/tmp/${ARMBIAN_MNT_SUFFIX}[^\s]+" || test $? = 1; })
+  echo ARMBIAN_MNTS=$ARMBIAN_MNTS
+  if [[ -n "$ARMBIAN_MNTS" ]]; then
+    while read -r target; do
+      umount -v $ARMBIAN_MNTS
+    done <<< "$ARMBIAN_MNTS"
+  fi
+
+  if [[ -n "$DATA_IMG" ]] ; then
+    print_cmd_title "Repacking $DATA_IMG..."
+    local TMP_DIR=$(mktemp -d -t ${ARMBIAN_MNT_SUFFIX}XXXXXXXXXX)
+    mount -v -o loop,rw $DATA_IMG $TMP_DIR
+
+    "$@" "$TMP_DIR";
+
+    umount -v $TMP_DIR/
+    rm -rv $TMP_DIR/
+  else
+    echo "${FUNCNAME[0]}(): DATA_IMG is empty"
+  fi
+}
+
 repack_boot_partition() {
   if [[ -n "$1" || -n "$2" || -n "$3" ]] ; then
     local BOOT_PART=$1
