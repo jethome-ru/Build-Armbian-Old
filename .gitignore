@@ -17,6 +17,8 @@ ubuntu-*-cloudimg-console.log
 /cache/
 /*userpatches*/
 /userpatches
+/jethome/*/*/*.PARTITION
+/jethome/*/*/*/*.img
 
 ### General annoyances ###
 .DS_Store
