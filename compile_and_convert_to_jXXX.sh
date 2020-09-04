@@ -37,6 +37,7 @@ cp -fv $JETHOME/lib.config $USERPATCHES/
 
 ./compile.sh docker \
 BUILD_KSRC=yes \
+CUSTOMIZATION_PACKAGE_LIST_ADDITIONAL="" \
 BOARD=arm-64 \
 BRANCH=current \
 RELEASE=focal \
