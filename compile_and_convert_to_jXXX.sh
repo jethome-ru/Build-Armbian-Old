@@ -3,6 +3,16 @@
 # -x        Print commands and their arguments as they are executed.
 
 set -e # Exit immediately if a command exits with a non-zero status
+
+# Script parameters handling
+while [[ "${1}" == *=* ]]; do
+    parameter=${1%%=*}
+    value=${1##*=}
+    shift
+    echo "$0: setting $parameter to" "${value:-(empty)}"
+    eval "$parameter=\"$value\""
+done
+
 set -u # Treat unset variables and parameters as an error
 
 SRC="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
@@ -34,10 +44,12 @@ cp -fv $JETHOME/patch/sources/families/arm-64.conf $USERPATCHES_SOURCES_FAMILIES
 cp -frv $JETHOME/overlay/* $USERPATCHES_OVERLAY/
 cp -fv $JETHOME/customize-image.sh $USERPATCHES/
 cp -fv $JETHOME/lib.config $USERPATCHES/
+echo "${CUSTOMIZATION_PREBUILT_DEBS:-}" > $USERPATCHES_OVERLAY/CUSTOMIZATION_PREBUILT_DEBS
 
 ./compile.sh docker \
 BUILD_KSRC=yes \
-CUSTOMIZATION_PACKAGE_LIST_ADDITIONAL="" \
+CUSTOMIZATION_PACKAGE_LIST_ADDITIONAL="${CUSTOMIZATION_PACKAGE_LIST_ADDITIONAL:-}" \
+CUSTOMIZATION_PREBUILT_DEBS="${CUSTOMIZATION_PREBUILT_DEBS:-}" \
 BOARD=arm-64 \
 BRANCH=current \
 RELEASE=focal \

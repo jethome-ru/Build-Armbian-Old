@@ -16,14 +16,36 @@ LINUXFAMILY=$2
 BOARD=$3
 BUILD_DESKTOP=$4
 
+print_title() {
+  if [ -n "$1" ] ; then
+    echo "###### ${1} ######"
+  else
+    echo "${FUNCNAME[0]}(): Null parameter passed to this function"
+  fi
+}
+
+
 create_deb_packages() {
+  print_title "Creating deb packages iterating *.conf files"
   mkdir -v /tmp/overlay/debs
   for package_script in /tmp/overlay/packages/*.conf; do
     source $package_script
   done
 }
 
+customization_install_prebuilt_packages() {
+  print_title "Installing customization prebuilt packages"
+  local customization_prebuilt_debs
+  customization_prebuilt_debs=$(</tmp/overlay/CUSTOMIZATION_PREBUILT_DEBS)
+  if [[ -n "$customization_prebuilt_debs" ]]; then
+    for package_deb_file in /tmp/overlay/packages/customization/$customization_prebuilt_debs/*.deb; do
+      DEBIAN_FRONTEND=noninteractive apt -yqq --no-install-recommends install "$package_deb_file"
+    done
+  fi
+}
+
 create_brcm_symlinks() {
+  print_title "Creating brcm symlinks"
   ln -vs brcmfmac43455-sdio.txt /usr/lib/firmware/brcm/brcmfmac43455-sdio.amlogic,s400.txt
   ln -vs ../BCM4345C0.hcd /usr/lib/firmware/brcm/BCM4345C0.hcd
 
@@ -32,7 +54,7 @@ create_brcm_symlinks() {
 }
 
 install_fw_env_config_generator() {
-  # insert fw_env.config generation code into rc.local just before "exit 0"
+  print_title "Inserting fw_env.config generation code into rc.local just before 'exit 0'"
 
   local RC_LOCAL=/etc/rc.local
   local RC_LOCAL_NEW=${RC_LOCAL}.new
@@ -56,6 +78,7 @@ Main() {
       if [[ "$LINUXFAMILY" = "arm-64" ]]; then
         if [[ "$BOARD" = "arm-64" ]]; then
           create_deb_packages
+          customization_install_prebuilt_packages
           create_brcm_symlinks
           install_fw_env_config_generator
         fi
