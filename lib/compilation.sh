@@ -577,6 +577,12 @@ compile_armbian-config()
 	install -m 755 "${SRC}"/cache/sources/armbian-config/debian-config "${tmpdir}"/usr/sbin/armbian-config
 	install -m 644 "${SRC}"/cache/sources/armbian-config/debian-config-jobs "${tmpdir}"/usr/lib/armbian-config/jobs.sh
 	install -m 644 "${SRC}"/cache/sources/armbian-config/debian-config-submenu "${tmpdir}"/usr/lib/armbian-config/submenu.sh
+
+	(
+	cd "${SRC}"/cache/sources/armbian-config/
+	process_patch_file "${SRC}/jethome/patch/sources/armbian-config/debian-config-functions-disable-dtb-deb-package-and-add-uboot-deb-package.patch" "applying"
+	)
+
 	install -m 644 "${SRC}"/cache/sources/armbian-config/debian-config-functions "${tmpdir}"/usr/lib/armbian-config/functions.sh
 	install -m 644 "${SRC}"/cache/sources/armbian-config/debian-config-functions-network "${tmpdir}"/usr/lib/armbian-config/functions-network.sh
 	install -m 755 "${SRC}"/cache/sources/armbian-config/softy "${tmpdir}"/usr/sbin/softy
