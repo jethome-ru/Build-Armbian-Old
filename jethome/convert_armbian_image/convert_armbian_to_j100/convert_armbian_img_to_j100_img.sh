@@ -59,9 +59,9 @@ extract_partition "ROOTFS" "$INPUT_IMG" "$ROOTFS_PARTITION_START" "$ROOTFS_PARTI
 
 echo
 
-repack_rootfs_partition "set_swap_memory_percents_size" "100"
+# repack_rootfs_partition "set_swap_memory_percents_size" "100"
 
-echo
+# echo
 
 # shrink_rootfs_partition "$DATA_IMG"
 
