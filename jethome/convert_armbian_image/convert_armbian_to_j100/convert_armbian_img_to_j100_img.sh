@@ -43,6 +43,28 @@ set_swap_memory_percents_size() {
   fi
 }
 
+set_swapfile() {
+  if [[ -n "$1" || -n "$2" ]] ; then
+    local swapfile_size_in_mibs=$1
+    local rootfs_dir=$2
+
+    local armbian_swapfile_path=/swapfile
+
+    print_cmd_title "Setting $armbian_swapfile_path with size $swapfile_size_in_mibs MiBs"
+    # disable armbian-zram-config.service
+    # rm -v ${rootfs_dir}/etc/systemd/system/sysinit.target.wants/armbian-zram-config.service
+
+    echo "dd if=/dev/zero of=${rootfs_dir}${armbian_swapfile_path} bs=1MiB count=$swapfile_size_in_mibs status=progress"
+    dd if=/dev/zero of=${rootfs_dir}${armbian_swapfile_path} bs=1MiB count=$swapfile_size_in_mibs status=progress
+    chmod -v 600 ${rootfs_dir}${armbian_swapfile_path}
+    mkswap ${rootfs_dir}${armbian_swapfile_path}
+    echo "\"$armbian_swapfile_path none swap sw 0 0\" >> $rootfs_dir/etc/fstab"
+    echo "$armbian_swapfile_path none swap sw 0 0" >> $rootfs_dir/etc/fstab
+  else
+    echo "${FUNCNAME[0]}(): Null parameter passed to this function"
+  fi
+}
+
 get_input_img "$INPUT_FILE"
 
 echo
@@ -56,6 +78,10 @@ extract_partition "BOOT" "$INPUT_IMG" "$BOOT_PARTITION_START" "$BOOT_PARTITION_S
 echo
 
 extract_partition "ROOTFS" "$INPUT_IMG" "$ROOTFS_PARTITION_START" "$ROOTFS_PARTITION_SIZE" "$DATA_IMG"
+
+echo
+
+repack_rootfs_partition "set_swapfile" "128"
 
 echo
 
