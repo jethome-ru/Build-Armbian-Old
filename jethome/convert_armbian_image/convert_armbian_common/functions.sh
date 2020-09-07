@@ -42,7 +42,6 @@ repack_rootfs_partition() {
   local ARMBIAN_MNTS
   # workaround for 'set -e' to continue script execution if grep does not match pattern
   ARMBIAN_MNTS=$(mount | { grep -Po "(?<=on )/tmp/${ARMBIAN_MNT_SUFFIX}[^\s]+" || test $? = 1; })
-  echo ARMBIAN_MNTS=$ARMBIAN_MNTS
   if [[ -n "$ARMBIAN_MNTS" ]]; then
     while read -r target; do
       umount -v $ARMBIAN_MNTS
