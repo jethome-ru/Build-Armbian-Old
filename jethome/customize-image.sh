@@ -44,6 +44,21 @@ customization_install_prebuilt_packages() {
   fi
 }
 
+customization_install_rootfs_patches() {
+  print_title "Installing customization rootfs patches"
+  local customization_rootfs_patches
+  customization_rootfs_patches=$(</tmp/overlay/CUSTOMIZATION_ROOTFS_PATCHES)
+  if [[ -n "$customization_rootfs_patches" ]]; then
+    local patch_dir="/tmp/overlay/rootfs_patches/$customization_rootfs_patches"
+    if [[ -d ${patch_dir} && ! -z `ls ${patch_dir}` ]]; then
+      echo "----> copying patches from ${patch_dir}"
+      cp -rvf ${patch_dir}/* ./
+    else
+      echo "----> skipping patches from ${patch_dir}"
+    fi
+  fi
+}
+
 create_brcm_symlinks() {
   print_title "Creating brcm symlinks"
   ln -vs brcmfmac43455-sdio.txt /usr/lib/firmware/brcm/brcmfmac43455-sdio.amlogic,s400.txt
@@ -79,6 +94,7 @@ Main() {
         if [[ "$BOARD" = "arm-64" ]]; then
           create_deb_packages
           customization_install_prebuilt_packages
+          customization_install_rootfs_patches
           create_brcm_symlinks
           install_fw_env_config_generator
         fi
