@@ -1,0 +1,16 @@
+
+[Unit]
+Description=JetHome fw_env.conf generator
+DefaultDependencies=no
+After=local-fs.target
+Before=armbian-ramlog.target
+Conflicts=shutdown.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/lib/jethome/fw_env_generator
+RemainAfterExit=yes
+TimeoutStartSec=30sec
+
+[Install]
+WantedBy=sysinit.target

@@ -68,25 +68,6 @@ create_brcm_symlinks() {
   ls -lhA /usr/lib/firmware/brcm/BCM4345C0.hcd
 }
 
-install_fw_env_config_generator() {
-  print_title "Inserting fw_env.config generation code into rc.local just before 'exit 0'"
-
-  local RC_LOCAL=/etc/rc.local
-  local RC_LOCAL_NEW=${RC_LOCAL}.new
-
-  while IFS= read -r line; do
-    if [[ "$line" =~ ^exit\ 0$ ]]; then
-      cat /tmp/overlay/etc/fw_env_generator >> $RC_LOCAL_NEW
-      echo >> $RC_LOCAL_NEW
-    fi
-    echo "$line" >> $RC_LOCAL_NEW
-  done < $RC_LOCAL
-
-  chmod -v +x $RC_LOCAL_NEW
-  mv -fv $RC_LOCAL_NEW $RC_LOCAL
-
-}
-
 Main() {
   case $RELEASE in
     focal)
@@ -96,7 +77,6 @@ Main() {
           customization_install_prebuilt_packages
           customization_install_rootfs_patches
           create_brcm_symlinks
-          install_fw_env_config_generator
         fi
       fi
       ;;

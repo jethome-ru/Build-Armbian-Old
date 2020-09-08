@@ -1,0 +1,26 @@
+#!/bin/bash
+
+FILE=/etc/fw_env.config
+
+if ! grep -q "^/dev/mmcblk" "$FILE"; then
+  FAT_ENV_PARTITION=/dev/mmcblk1p5
+  MMC_DEVICE=/dev/mmcblk1
+
+  # offset is output of 'amlmmc env'
+  MMC_ENV_OFFSET=0x000027400000
+
+  ENV_SIZE=0x10000
+
+  echo "# MTD device name   Device offset   Env. size" > $FILE
+
+  if [ -e $FAT_ENV_PARTITION ]; then
+    # Boot from device MMC
+    echo "$FAT_ENV_PARTITION 0x0 $ENV_SIZE" >> $FILE
+  else
+    # Boot from USB Flash Drive
+    echo "$MMC_DEVICE $MMC_ENV_OFFSET $ENV_SIZE" >> $FILE
+  fi
+  echo "$FILE succesfully generated"
+else
+  echo "$FILE with ^/dev/mmcblk line already exists"
+fi
