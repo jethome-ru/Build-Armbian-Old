@@ -221,7 +221,7 @@
 		key_3:key_3{
 			keyname = "usid";
 			offset = <18>;
-			size = <16>;
+			size = <32>;
 		};
 	};
 
