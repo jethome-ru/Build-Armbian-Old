@@ -1,4 +1,7 @@
 dpkg -b "$PACKAGE_NAME" "${PACKAGE_NAME}.deb"
-DEBIAN_FRONTEND=noninteractive apt -yqq --no-install-recommends install "./${PACKAGE_NAME}.deb"
-mv -v "${PACKAGE_NAME}.deb" /tmp/overlay/debs
-rm -rf "$PACKAGE_NAME"
+if DEBIAN_FRONTEND=noninteractive apt -yqq --no-install-recommends install "./${PACKAGE_NAME}.deb"; then
+	mv -v "${PACKAGE_NAME}.deb" /tmp/overlay/debs/
+	rm -rf "$PACKAGE_NAME"
+else
+	exit 1
+fi

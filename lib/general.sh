@@ -177,7 +177,9 @@ create_sources_list()
 	else
 		# echo "deb http://"$([[ $BETA == yes ]] && echo "beta" || echo "apt" )".armbian.com $RELEASE main ${RELEASE}-utils ${RELEASE}-desktop" > "${SDCARD}"/etc/apt/sources.list.d/armbian.list
 		local jethome_release_version=$(get_jethome_release_version)
-		echo "deb http://repo.jethome.ru $RELEASE "$([[ -n "$jethome_release_version" ]] && echo "main" || echo "testing" ) > "${SDCARD}"/etc/apt/sources.list.d/armbian.list
+		local jethome_repo=$([[ -n "$CUSTOMIZATION_NAME" ]] && echo $CUSTOMIZATION_NAME || ( [[ -n "$jethome_release_version" ]] && echo "main" || echo "testing" ) )
+		local jethome_repo_deb_line="deb http://repo.jethome.ru $RELEASE $jethome_repo"
+		echo "$jethome_repo_deb_line" > "${SDCARD}"/etc/apt/sources.list.d/armbian.list
 	fi
 
 	# add local package server if defined. Suitable for development
@@ -188,7 +190,7 @@ create_sources_list()
 	# chroot "${SDCARD}" /bin/bash -c "cat armbian.key | apt-key add - > /dev/null 2>&1"
 	# rm "${SDCARD}"/armbian.key
 
-	display_alert "Adding JetHome repository and authentication key" "/etc/apt/sources.list.d/armbian.list" "info"
+	display_alert "Adding JetHome repository \"$jethome_repo_deb_line\" and authentication key" "/etc/apt/sources.list.d/armbian.list" "info"
 	cp "${SRC}"/config/jethome.gpg.key "${SDCARD}"
 	chroot "${SDCARD}" /bin/bash -c "cat jethome.gpg.key | apt-key add - > /dev/null 2>&1"
 	rm "${SDCARD}"/jethome.gpg.key

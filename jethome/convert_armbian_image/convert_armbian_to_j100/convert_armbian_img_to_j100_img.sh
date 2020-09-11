@@ -9,6 +9,7 @@ I=$(self_name)
 
 if [[ $# != 2 ]]; then
   j100_usage "$I"
+  exit 1
 fi
 
 INPUT_FILE=$1

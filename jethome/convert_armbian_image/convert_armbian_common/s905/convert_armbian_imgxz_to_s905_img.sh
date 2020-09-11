@@ -1,9 +1,8 @@
-#/bin/bash -x
-#
-# -x        Print commands and their arguments as they are executed.
+#!/bin/bash
 
 if [[ $# != 2 ]]; then
   s905_usage "$I" "$S905_VARIANT"
+  exit 1
 fi
 
 INPUT_FILE=$1

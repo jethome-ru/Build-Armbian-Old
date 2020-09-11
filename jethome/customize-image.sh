@@ -27,7 +27,6 @@ print_title() {
 
 create_deb_packages() {
   print_title "Creating deb packages iterating *.conf files"
-  mkdir -v /tmp/overlay/debs
   for package_script in /tmp/overlay/packages/*.conf; do
     source "$package_script"
   done
@@ -36,12 +35,16 @@ create_deb_packages() {
 customization_install_prebuilt_packages() {
   print_title "Installing customization prebuilt packages"
   local customization_prebuilt_debs
-  customization_prebuilt_debs=$(</tmp/overlay/CUSTOMIZATION_PREBUILT_DEBS)
+  customization_prebuilt_debs=$(</tmp/overlay/CUSTOMIZATION_NAME)
   local customization_prebuilt_debs_dir_path="/tmp/overlay/packages/customization/$customization_prebuilt_debs"
   if [[ -n "$customization_prebuilt_debs" ]]; then
     if [[ -d "$customization_prebuilt_debs_dir_path" && -n "$(ls "$customization_prebuilt_debs_dir_path")" ]]; then
       for package_deb_file in "$customization_prebuilt_debs_dir_path"/*.deb; do
-        DEBIAN_FRONTEND=noninteractive apt -yqq --no-install-recommends install "$package_deb_file"
+        if DEBIAN_FRONTEND=noninteractive apt -yqq --no-install-recommends install "$package_deb_file"; then
+          cp -fv "$package_deb_file" /tmp/overlay/debs/
+        else
+          exit 1
+        fi
       done
     else
       echo "----> skipping customization prebuilt packages from $customization_prebuilt_debs_dir_path"
@@ -52,12 +55,14 @@ customization_install_prebuilt_packages() {
 customization_install_rootfs_patches() {
   print_title "Installing customization rootfs patches"
   local customization_rootfs_patches
-  customization_rootfs_patches=$(</tmp/overlay/CUSTOMIZATION_ROOTFS_PATCHES)
+  customization_rootfs_patches=$(</tmp/overlay/CUSTOMIZATION_NAME)
   if [[ -n "$customization_rootfs_patches" ]]; then
     local patch_dir="/tmp/overlay/rootfs_patches/$customization_rootfs_patches"
     if [[ -d "${patch_dir}" && -n "$(ls "${patch_dir}")" ]]; then
       echo "----> copying patches from ${patch_dir}"
-      cp -rvf "${patch_dir}"/* ./
+      if ! cp -rvf "${patch_dir}"/* ./; then
+        exit 1
+      fi
     else
       echo "----> skipping patches from ${patch_dir}"
     fi
