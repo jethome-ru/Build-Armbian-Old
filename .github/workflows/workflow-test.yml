@@ -31,11 +31,7 @@ jobs:
 
     - name: Create REPO_BUILD_TYPE variable 
       run: |
-       if [[ "$GITHUB_REF" = refs/tags/jethome_release_* ]]; then
-         echo '::set-env name=REPO_BUILD_TYPE::release
-       else
-         echo '::set-env name=REPO_BUILD_TYPE::beta
-       fi
+       if [[ "$GITHUB_REF" = refs/tags/jethome_release_* ]]; then echo '::set-env name=REPO_BUILD_TYPE::release'; else echo '::set-env name=REPO_BUILD_TYPE::beta'; fi
 
     # Compile
     - name: Run a one-line script
