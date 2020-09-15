@@ -29,12 +29,21 @@ jobs:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
 
+    - name: Create REPO_BUILD_TYPE variable 
+      run: |
+       if [[ "$GITHUB_REF" = refs/tags/jethome_release_* ]]; then
+         echo '::set-env name=REPO_BUILD_TYPE::release
+       else
+         echo '::set-env name=REPO_BUILD_TYPE::beta
+       fi
+
     # Compile
     - name: Run a one-line script
       run: |
        echo ./compile_and_convert_to_jXXX.sh
        echo git tag --contains "$(git rev-parse HEAD)"
        git tag --contains "$(git rev-parse HEAD)"
+       echo REPO_BUILD_TYPE=$REPO_BUILD_TYPE
 
     - name: Echo GITHUB_REF
       run: echo GITHUB_REF=$GITHUB_REF GITHUB_HEAD_REF=$GITHUB_HEAD_REF GITHUB_BASE_REF=$GITHUB_BASE_REF GITHUB_SHA=$GITHUB_SHA GITHUB_EVENT_NAME=$GITHUB_EVENT_NAME GITHUB_EVENT_PATH=$GITHUB_EVENT_PATH
