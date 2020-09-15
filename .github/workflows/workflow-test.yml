@@ -49,12 +49,15 @@ jobs:
 
     # Compile
     - name: Run a one-line script
+      if: ${{ github.ref != '**tags/jethome_release_*' }}
       run: echo ./compile_and_convert_to_jXXX.sh CUSTOMIZATION_NAME=$CUSTOMIZATION_NAME
 
     - name: Upload img J100
+      if: ${{ github.ref != '**tags/jethome_release_*' }}
       run: |
        echo rsync -a output/images/Armbian_*_j100_*$CUSTOMIZATION_NAME.img repo@update.jethome.ru:/var/www/update.jethome.ru/armbian/ || true
        echo rsync -a output/images/Armbian_*_j80_*$CUSTOMIZATION_NAME.img repo@update.jethome.ru:/var/www/update.jethome.ru/armbian/ || true
        
     - name: Upload deb to repo
+      if: ${{ github.ref != '**tags/jethome_release_*' }}
       run: echo rsync -ar --delete-before output/debs/ repo@update.jethome.ru:~/$CUSTOMIZATION_NAME.img/ || true
