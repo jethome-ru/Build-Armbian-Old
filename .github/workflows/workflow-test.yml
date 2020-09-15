@@ -27,6 +27,12 @@ jobs:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
 
+    - name: Echo GITHUB_REF
+      run: echo GITHUB_REF=$GITHUB_REF GITHUB_HEAD_REF=$GITHUB_HEAD_REF GITHUB_BASE_REF=$GITHUB_BASE_REF GITHUB_SHA=$GITHUB_SHA GITHUB_EVENT_NAME=$GITHUB_EVENT_NAME GITHUB_EVENT_PATH=$GITHUB_EVENT_PATH
+
+    - name: Cat webhook event payload
+      run: cat $GITHUB_EVENT_PATH
+
     # Compile
     - name: Run a one-line script
       run: echo ./compile_and_convert_to_jXXX.sh CUSTOMIZATION_NAME=$CUSTOMIZATION_NAME
