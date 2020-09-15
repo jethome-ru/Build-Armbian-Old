@@ -76,4 +76,4 @@ KERNEL_ONLY=no \
 KERNEL_CONFIGURE=no \
 CREATE_PATCHES=no \
 COMPRESS_OUTPUTIMAGE=sha,gpg,img \
-LIB_TAG=jethome
+LIB_TAG=workflow_yaml_test

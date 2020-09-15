@@ -429,6 +429,8 @@ done
 
 fi
 
+exit_with_error "Manual exit_with_error"
+
 # Compile u-boot if packed .deb does not exist or use the one from repository
 if [[ ! -f "${DEB_STORAGE}"/${CHOSEN_UBOOT}_${REVISION}_${ARCH}.deb ]]; then
 
