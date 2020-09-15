@@ -14,6 +14,8 @@ on:
 jobs:
   # This workflow contains a single job called "build"
   build:
+    env:
+      CUSTOMIZATION_NAME: helloworld
     # The type of runner that the job will run on
     runs-on: self-hosted 
 
@@ -24,6 +26,9 @@ jobs:
 
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
+
+    - name: Echo CUSTOMIZATION_NAME
+      run: echo CUSTOMIZATION_NAME=$CUSTOMIZATION_NAME
 
     # Compile
     - name: Run a one-line script

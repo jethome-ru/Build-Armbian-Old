@@ -402,6 +402,8 @@ prepare_host
 
 # fetch_from_repo <url> <dir> <ref> <subdir_flag>
 
+exit_with_error "Manual exit_with_error"
+
 # ignore updates help on building all images - for internal purposes
 if [[ $IGNORE_UPDATES != yes ]]; then
 display_alert "Downloading sources" "" "info"
@@ -428,8 +430,6 @@ for option in $(tr ',' ' ' <<< "$CLEAN_LEVEL"); do
 done
 
 fi
-
-exit_with_error "Manual exit_with_error"
 
 # Compile u-boot if packed .deb does not exist or use the one from repository
 if [[ ! -f "${DEB_STORAGE}"/${CHOSEN_UBOOT}_${REVISION}_${ARCH}.deb ]]; then
