@@ -7,8 +7,10 @@ name: CI
 on:
   push:
     branches: [ workflow_yaml_test ]
+    tags: [ jethome_release_* ]
   pull_request:
     branches: [ workflow_yaml_test ]
+    tags: [ jethome_release_* ]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -27,11 +29,20 @@ jobs:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
 
+    # Compile
+    - name: Run a one-line script
+      run: echo ./compile_and_convert_to_jXXX.sh
+
     - name: Echo GITHUB_REF
       run: echo GITHUB_REF=$GITHUB_REF GITHUB_HEAD_REF=$GITHUB_HEAD_REF GITHUB_BASE_REF=$GITHUB_BASE_REF GITHUB_SHA=$GITHUB_SHA GITHUB_EVENT_NAME=$GITHUB_EVENT_NAME GITHUB_EVENT_PATH=$GITHUB_EVENT_PATH
 
-    - name: Cat webhook event payload
-      run: cat $GITHUB_EVENT_PATH
+    - name: Upload img JXXX
+      run: |
+       echo rsync -a output/images/Armbian_*_j100_*$CUSTOMIZATION_NAME.img repo@update.jethome.ru:/var/www/update.jethome.ru/armbian/ || true
+       echo rsync -a output/images/Armbian_*_j80_*$CUSTOMIZATION_NAME.img repo@update.jethome.ru:/var/www/update.jethome.ru/armbian/ || true
+       
+    - name: Upload deb to repo
+      run: echo rsync -ar --delete-before output/debs/ repo@update.jethome.ru:~/$CUSTOMIZATION_NAME.img/ || true
 
     # Compile
     - name: Run a one-line script
