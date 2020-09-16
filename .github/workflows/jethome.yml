@@ -7,13 +7,17 @@ name: CI
 on:
   push:
     branches: [ jethome ]
+    tags: [ jethome_release_* ]
   pull_request:
     branches: [ jethome ]
+    tags: [ jethome_release_* ]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
   build:
+    env:
+      CUSTOMIZATION_NAME: helloworld
     # The type of runner that the job will run on
     runs-on: self-hosted 
 
@@ -25,6 +29,14 @@ jobs:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
 
+    - name: Set REPO_BUILD_TYPE variable 
+      run: |
+       if [[ "$GITHUB_REF" = refs/tags/jethome_release_* ]]; then \
+         echo '::set-env name=REPO_BUILD_TYPE::release/debs'; \
+       else \
+         echo '::set-env name=REPO_BUILD_TYPE::beta'; \
+       fi
+
     # Compile
     - name: Run a one-line script
       run: ./compile_and_convert_to_jXXX.sh
@@ -35,4 +47,19 @@ jobs:
        rsync -a output/images/Armbian_*_j80.img repo@update.jethome.ru:/var/www/update.jethome.ru/armbian/ || true
        
     - name: Upload deb to repo
-      run: rsync -ar --delete-before output/debs/ repo@update.jethome.ru:~/beta/ || true
+      run: rsync -ar --delete-before output/debs/ repo@update.jethome.ru:~/$REPO_BUILD_TYPE/ || true
+
+    # Compile customization
+    - name: Run a one-line customization script
+      if: ${{ !startsWith(github.ref, 'refs/tags/jethome_release_') }}
+      run: ./compile_and_convert_to_jXXX.sh CUSTOMIZATION_NAME=$CUSTOMIZATION_NAME
+
+    - name: Upload customization img J100
+      if: ${{ !startsWith(github.ref, 'refs/tags/jethome_release_') }}
+      run: |
+       rsync -a output/images/Armbian_*_j100_*$CUSTOMIZATION_NAME.img repo@update.jethome.ru:/var/www/update.jethome.ru/armbian/ || true
+       rsync -a output/images/Armbian_*_j80_*$CUSTOMIZATION_NAME.img repo@update.jethome.ru:/var/www/update.jethome.ru/armbian/ || true
+       
+    - name: Upload customization deb to repo
+      if: ${{ !startsWith(github.ref, 'refs/tags/jethome_release_') }}
+      run: rsync -ar --delete-before output/debs/ repo@update.jethome.ru:~/$CUSTOMIZATION_NAME/ || true
