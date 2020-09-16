@@ -1,0 +1,40 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI helloworld customization
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on:
+  push:
+    branches: [ jethome ]
+  pull_request:
+    branches: [ jethome ]
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    env:
+      JETHOME_CI_CUSTOMIZATION_NAME: helloworld
+    # The type of runner that the job will run on
+    runs-on: self-hosted 
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+    - name: Fix Permitions
+      run: sudo chown -R actions:actions /home/actions/actions-runner/_work/
+
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - uses: actions/checkout@v2
+
+    # Compile customization
+    - name: Run a one-line customization script
+      run: ./compile_and_convert_to_jXXX.sh JETHOME_CUSTOMIZATION_NAME=$JETHOME_CI_CUSTOMIZATION_NAME
+
+    - name: Upload customization img J100
+      run: |
+       rsync -a output/images/Armbian_*_j100_*$JETHOME_CI_CUSTOMIZATION_NAME.img repo@update.jethome.ru:/var/www/update.jethome.ru/armbian/ || true
+       rsync -a output/images/Armbian_*_j80_*$JETHOME_CI_CUSTOMIZATION_NAME.img repo@update.jethome.ru:/var/www/update.jethome.ru/armbian/ || true
+       
+    - name: Upload customization deb to repo
+      run: rsync -ar --delete-before output/debs/ repo@update.jethome.ru:~/$JETHOME_CI_CUSTOMIZATION_NAME/ || true
