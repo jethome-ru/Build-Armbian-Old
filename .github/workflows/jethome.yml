@@ -29,12 +29,12 @@ jobs:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
 
-    - name: Set REPO_BUILD_TYPE variable 
+    - name: Set JETHOME_CI_REPO_BUILD_TYPE variable 
       run: |
        if [[ "$GITHUB_REF" = refs/tags/jethome_release_* ]]; then \
-         echo '::set-env name=REPO_BUILD_TYPE::release/debs'; \
+         echo '::set-env name=JETHOME_CI_REPO_BUILD_TYPE::release/debs'; \
        else \
-         echo '::set-env name=REPO_BUILD_TYPE::beta'; \
+         echo '::set-env name=JETHOME_CI_REPO_BUILD_TYPE::beta'; \
        fi
 
     # Compile
@@ -47,7 +47,7 @@ jobs:
        rsync -a output/images/Armbian_*_j80.img repo@update.jethome.ru:/var/www/update.jethome.ru/armbian/ || true
        
     - name: Upload deb to repo
-      run: rsync -ar --delete-before output/debs/ repo@update.jethome.ru:~/$REPO_BUILD_TYPE/ || true
+      run: rsync -ar --delete-before output/debs/ repo@update.jethome.ru:~/$JETHOME_CI_REPO_BUILD_TYPE/ || true
 
     # Compile customization
     - name: Run a one-line customization script
