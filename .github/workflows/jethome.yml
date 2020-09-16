@@ -17,7 +17,7 @@ jobs:
   # This workflow contains a single job called "build"
   build:
     env:
-      CUSTOMIZATION_NAME: helloworld
+      JETHOME_CI_CUSTOMIZATION_NAME: helloworld
     # The type of runner that the job will run on
     runs-on: self-hosted 
 
@@ -52,14 +52,14 @@ jobs:
     # Compile customization
     - name: Run a one-line customization script
       if: ${{ !startsWith(github.ref, 'refs/tags/jethome_release_') }}
-      run: ./compile_and_convert_to_jXXX.sh JETHOME_CUSTOMIZATION_NAME=$CUSTOMIZATION_NAME
+      run: ./compile_and_convert_to_jXXX.sh JETHOME_CUSTOMIZATION_NAME=$JETHOME_CI_CUSTOMIZATION_NAME
 
     - name: Upload customization img J100
       if: ${{ !startsWith(github.ref, 'refs/tags/jethome_release_') }}
       run: |
-       rsync -a output/images/Armbian_*_j100_*$CUSTOMIZATION_NAME.img repo@update.jethome.ru:/var/www/update.jethome.ru/armbian/ || true
-       rsync -a output/images/Armbian_*_j80_*$CUSTOMIZATION_NAME.img repo@update.jethome.ru:/var/www/update.jethome.ru/armbian/ || true
+       rsync -a output/images/Armbian_*_j100_*$JETHOME_CI_CUSTOMIZATION_NAME.img repo@update.jethome.ru:/var/www/update.jethome.ru/armbian/ || true
+       rsync -a output/images/Armbian_*_j80_*$JETHOME_CI_CUSTOMIZATION_NAME.img repo@update.jethome.ru:/var/www/update.jethome.ru/armbian/ || true
        
     - name: Upload customization deb to repo
       if: ${{ !startsWith(github.ref, 'refs/tags/jethome_release_') }}
-      run: rsync -ar --delete-before output/debs/ repo@update.jethome.ru:~/$CUSTOMIZATION_NAME/ || true
+      run: rsync -ar --delete-before output/debs/ repo@update.jethome.ru:~/$JETHOME_CI_CUSTOMIZATION_NAME/ || true
