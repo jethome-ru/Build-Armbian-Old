@@ -52,7 +52,7 @@ jobs:
     # Compile customization
     - name: Run a one-line customization script
       if: ${{ !startsWith(github.ref, 'refs/tags/jethome_release_') }}
-      run: ./compile_and_convert_to_jXXX.sh CUSTOMIZATION_NAME=$CUSTOMIZATION_NAME
+      run: ./compile_and_convert_to_jXXX.sh JETHOME_CUSTOMIZATION_NAME=$CUSTOMIZATION_NAME
 
     - name: Upload customization img J100
       if: ${{ !startsWith(github.ref, 'refs/tags/jethome_release_') }}

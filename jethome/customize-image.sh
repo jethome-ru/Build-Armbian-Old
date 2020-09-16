@@ -35,7 +35,7 @@ create_deb_packages() {
 customization_install_prebuilt_packages() {
   print_title "Installing customization prebuilt packages"
   local customization_prebuilt_debs
-  customization_prebuilt_debs=$(</tmp/overlay/CUSTOMIZATION_NAME)
+  customization_prebuilt_debs=$(</tmp/overlay/JETHOME_CUSTOMIZATION_NAME)
   local customization_prebuilt_debs_dir_path="/tmp/overlay/packages/customization/$customization_prebuilt_debs"
   if [[ -n "$customization_prebuilt_debs" ]]; then
     if [[ -d "$customization_prebuilt_debs_dir_path" && -n "$(ls "$customization_prebuilt_debs_dir_path")" ]]; then
@@ -55,7 +55,7 @@ customization_install_prebuilt_packages() {
 customization_install_rootfs_patches() {
   print_title "Installing customization rootfs patches"
   local customization_rootfs_patches
-  customization_rootfs_patches=$(</tmp/overlay/CUSTOMIZATION_NAME)
+  customization_rootfs_patches=$(</tmp/overlay/JETHOME_CUSTOMIZATION_NAME)
   if [[ -n "$customization_rootfs_patches" ]]; then
     local patch_dir="/tmp/overlay/rootfs_patches/$customization_rootfs_patches"
     if [[ -d "${patch_dir}" && -n "$(ls "${patch_dir}")" ]]; then
