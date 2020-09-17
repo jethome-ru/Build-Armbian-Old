@@ -41,8 +41,8 @@ jobs:
 
     - name: Upload img J100
       run: |
-       rsync -a output/images/Armbian_*_j100.img repo@update.jethome.ru:/var/www/update.jethome.ru/armbian/ || true
-       rsync -a output/images/Armbian_*_j80.img repo@update.jethome.ru:/var/www/update.jethome.ru/armbian/ || true
+       rsync -a output/images/Armbian_*_j100.img repo@update.jethome.ru:/var/www/update.jethome.ru/armbian/
+       rsync -a output/images/Armbian_*_j80.img repo@update.jethome.ru:/var/www/update.jethome.ru/armbian/
        
     - name: Upload deb to repo
-      run: rsync -ar --delete-before output/debs/ repo@update.jethome.ru:~/$JETHOME_CI_REPO_BUILD_TYPE/ || true
+      run: rsync -ar --delete-before output/debs/ repo@update.jethome.ru:~/$JETHOME_CI_REPO_BUILD_TYPE/

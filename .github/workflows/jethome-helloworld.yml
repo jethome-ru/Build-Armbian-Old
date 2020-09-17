@@ -33,8 +33,8 @@ jobs:
 
     - name: Upload customization img J100
       run: |
-       rsync -a output/images/Armbian_*_j100_*$JETHOME_CI_CUSTOMIZATION_NAME.img repo@update.jethome.ru:/var/www/update.jethome.ru/armbian/ || true
-       rsync -a output/images/Armbian_*_j80_*$JETHOME_CI_CUSTOMIZATION_NAME.img repo@update.jethome.ru:/var/www/update.jethome.ru/armbian/ || true
+       rsync -a output/images/Armbian_*_j100_*$JETHOME_CI_CUSTOMIZATION_NAME.img repo@update.jethome.ru:/var/www/update.jethome.ru/armbian/
+       rsync -a output/images/Armbian_*_j80_*$JETHOME_CI_CUSTOMIZATION_NAME.img repo@update.jethome.ru:/var/www/update.jethome.ru/armbian/
        
     - name: Upload customization deb to repo
-      run: rsync -ar --delete-before output/debs/ repo@update.jethome.ru:~/$JETHOME_CI_CUSTOMIZATION_NAME/ || true
+      run: rsync -ar --delete-before output/debs/ repo@update.jethome.ru:~/$JETHOME_CI_CUSTOMIZATION_NAME/
