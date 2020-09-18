@@ -65,7 +65,7 @@ echo "${JETHOME_CUSTOMIZATION_NAME:-}" > $USERPATCHES_OVERLAY/JETHOME_CUSTOMIZAT
 
 ./compile.sh docker \
 JETHOME_CUSTOMIZATION_NAME="${JETHOME_CUSTOMIZATION_NAME:-}" \
-CLEAN_LEVEL="make,alldebs,oldcache" \
+CLEAN_LEVEL="make,alldebs,cache" \
 BUILD_KSRC=yes \
 BOARD=arm-64 \
 BRANCH=current \
