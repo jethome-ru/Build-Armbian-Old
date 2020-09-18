@@ -518,6 +518,10 @@ compile_firmware()
 	# cp : create hardlinks
 	cp -alf "${SRC}"/cache/sources/armbian-firmware-git/* "${SRC}/cache/sources/${plugin_dir}/lib/firmware/"
 
+	# jethome: Create brcm symlinks
+	ln -vs brcmfmac43455-sdio.txt "${SRC}/cache/sources/${plugin_dir}"/lib/firmware/brcm/brcmfmac43455-sdio.amlogic,s400.txt || exit
+	ln -vs ../BCM4345C0.hcd "${SRC}/cache/sources/${plugin_dir}"/lib/firmware/brcm/BCM4345C0.hcd || exit
+
 	# cleanup what's not needed for sure
 	rm -rf "${SRC}/cache/sources/${plugin_dir}"/lib/firmware/{amdgpu,amd-ucode,radeon,nvidia,matrox,.git}
 	cd "${SRC}/cache/sources/${plugin_dir}" || exit

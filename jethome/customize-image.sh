@@ -69,15 +69,6 @@ customization_install_rootfs_patches() {
   fi
 }
 
-create_brcm_symlinks() {
-  print_title "Creating brcm symlinks"
-  ln -vs brcmfmac43455-sdio.txt /usr/lib/firmware/brcm/brcmfmac43455-sdio.amlogic,s400.txt
-  ln -vs ../BCM4345C0.hcd /usr/lib/firmware/brcm/BCM4345C0.hcd
-
-  ls -lhA /usr/lib/firmware/brcm/brcmfmac43455-sdio.amlogic,s400.txt
-  ls -lhA /usr/lib/firmware/brcm/BCM4345C0.hcd
-}
-
 Main() {
   case $RELEASE in
     focal)
@@ -86,7 +77,6 @@ Main() {
           create_deb_packages
           customization_install_prebuilt_packages
           customization_install_rootfs_patches
-          create_brcm_symlinks
         fi
       fi
       ;;
