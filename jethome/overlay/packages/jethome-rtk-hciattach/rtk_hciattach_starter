@@ -1,0 +1,9 @@
+#!/bin/bash
+
+if grep -Eq "^GXL.+S905W" /sys/devices/soc0/soc_id; then
+  rtk_hciattach /dev/ttyAML1 -s 115200 rtk_h5 115200
+elif grep -Eq "^AXG" /sys/devices/soc0/soc_id; then
+  echo "Amlogic AXG detected. Skip rtk_hciattach execution."
+else
+  echo "SoC detection failed. Unable to execute rtk_hciattach."
+fi

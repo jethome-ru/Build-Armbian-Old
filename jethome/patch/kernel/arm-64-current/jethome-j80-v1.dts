@@ -214,7 +214,7 @@
 	status = "okay";
 	pinctrl-0 = <&uart_a_pins>, <&uart_a_cts_rts_pins>;
 	pinctrl-names = "default";
-	uart-has-rtscts;
+	// uart-has-rtscts;
 
 	/*
 	bluetooth {
