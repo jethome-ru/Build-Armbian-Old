@@ -31,10 +31,14 @@ jobs:
     - name: Run a one-line customization script
       run: ./compile_and_convert_to_jXXX.sh JETHOME_CUSTOMIZATION_NAME=$JETHOME_CI_CUSTOMIZATION_NAME
 
-    - name: Upload customization img J100
-      run: |
-       rsync -a output/images/Armbian_*_j100_*$JETHOME_CI_CUSTOMIZATION_NAME.img repo@update.jethome.ru:/var/www/update.jethome.ru/armbian/
-       rsync -a output/images/Armbian_*_j80_*$JETHOME_CI_CUSTOMIZATION_NAME.img repo@update.jethome.ru:/var/www/update.jethome.ru/armbian/
-       
     - name: Upload customization deb to repo
       run: rsync -ar --delete-before output/debs/ repo@update.jethome.ru:~/$JETHOME_CI_CUSTOMIZATION_NAME/
+
+    - name: Upload changelog file
+      run: |
+       rsync -a CHANGELOG_JETHOME.md repo@update.jethome.ru:/var/www/update.jethome.ru/armbian/
+
+    - name: Upload customization img J100 and J80
+      run: |
+       rsync -a output/images/JetHome_*_Armbian_*_j100_*$JETHOME_CI_CUSTOMIZATION_NAME.img repo@update.jethome.ru:/var/www/update.jethome.ru/armbian/
+       rsync -a output/images/JetHome_*_Armbian_*_j80_*$JETHOME_CI_CUSTOMIZATION_NAME.img repo@update.jethome.ru:/var/www/update.jethome.ru/armbian/

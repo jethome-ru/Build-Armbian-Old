@@ -13,6 +13,7 @@
 # daily beta build contains date in subrevision
 #if [[ $BETA == yes && -z $SUBREVISION ]]; then SUBREVISION="."$(date --date="tomorrow" +"%j"); fi
 REVISION=$(cat "${SRC}"/VERSION)"$SUBREVISION" # all boards have same revision
+JETHOME_REVISION=$(cat "${SRC}"/VERSION_JETHOME)
 [[ -z $ROOTPWD ]] && ROOTPWD="jethome80100" # Must be changed @first login
 [[ -z $MAINTAINER ]] && MAINTAINER="Oleg Ivanov" # deb signature
 [[ -z $MAINTAINERMAIL ]] && MAINTAINERMAIL="balbes-150@yandex.ru" # deb signature

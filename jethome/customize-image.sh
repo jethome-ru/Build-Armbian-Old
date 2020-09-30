@@ -69,6 +69,18 @@ customization_install_rootfs_patches() {
   fi
 }
 
+install_version_jethome() {
+  local name=VERSION_JETHOME
+  local src_path=/tmp/overlay/$name
+  local dst_path=/etc/$name
+  print_title "Installing $dst_path"
+  if [[ -f $src_path ]]; then
+    cp -fv $src_path $dst_path
+  else
+    exit 1
+  fi
+}
+
 Main() {
   case $RELEASE in
     focal)
@@ -77,6 +89,7 @@ Main() {
           create_deb_packages
           customization_install_prebuilt_packages
           customization_install_rootfs_patches
+          install_version_jethome
         fi
       fi
       ;;
