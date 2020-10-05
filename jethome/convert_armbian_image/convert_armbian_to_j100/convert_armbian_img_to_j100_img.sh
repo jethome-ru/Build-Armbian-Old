@@ -15,8 +15,8 @@ fi
 INPUT_FILE=$1
 OUTPUT_IMG=$2
 
-SYSTEM_IMG=system_a.PARTITION
-DATA_IMG=data.PARTITION
+SYSTEM_IMG=boot.PARTITION
+DATA_IMG=rootfs.PARTITION
 
 set_swap_memory_percents_size() {
   if [[ -n "$1" || -n "$2" ]] ; then
