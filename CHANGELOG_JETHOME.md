@@ -1,3 +1,7 @@
+## 1.0.2 (2020-10-05)
+* Do re-partition: leave only two partitions: boot (512MB) and rootfs (6.64 Gb)
+* Return disappeared package linux-u-boot-arm-64-current
+
 ## 1.0.1 (2020-10-02)
 * Enable updating from usb drive at boot if usb drive with jethome_burn.ini and img files is inserted
 
