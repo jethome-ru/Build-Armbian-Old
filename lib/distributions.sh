@@ -237,9 +237,9 @@ install_common()
 
 	# install u-boot
 	if [[ "${REPOSITORY_INSTALL}" != *u-boot* ]]; then
-		UBOOT_VER=$(dpkg --info "${DEB_STORAGE}/${CHOSEN_UBOOT}_${JETHOME_UBOOT_PACKAGE_VERSION}_${ARCH}.deb" | grep Descr | awk '{print $(NF)}')
-		install_deb_chroot "${DEB_STORAGE}/${CHOSEN_UBOOT}_${JETHOME_UBOOT_PACKAGE_VERSION}_${ARCH}.deb"
-		UPSTREM_VER=$JETHOME_UBOOT_PACKAGE_VERSION
+		UBOOT_VER=$(dpkg --info "${DEB_STORAGE}/${CHOSEN_UBOOT}_${JETHOME_UBOOT_PACKAGE_ESCAPED_VERSION}_${ARCH}.deb" | grep Descr | awk '{print $(NF)}')
+		install_deb_chroot "${DEB_STORAGE}/${CHOSEN_UBOOT}_${JETHOME_UBOOT_PACKAGE_ESCAPED_VERSION}_${ARCH}.deb"
+		UPSTREM_VER=$JETHOME_UBOOT_PACKAGE_ESCAPED_VERSION
 	else
 		UBOOT_VER=$(chroot "${SDCARD}" /bin/bash -c "apt-cache --names-only search ^linux-u-boot-${BOARD}-${BRANCH} | awk '{print \$(NF)}'")
 		display_alert "Installing from repository" "linux-u-boot-${BOARD}-${BRANCH} $UBOOT_VER"
