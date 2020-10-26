@@ -167,7 +167,7 @@ if [[ "$BUILD_MINIMAL" != "yes"  ]]; then
 	PACKAGE_LIST_ADDITIONAL="$PACKAGE_LIST_ADDITIONAL alsa-utils btrfs-progs dosfstools iotop stress screen \
 		ntfs-3g vim pciutils evtest pv libfuse2 libdigest-sha-perl \
 		libproc-processtable-perl aptitude dnsutils f3 haveged hdparm rfkill vlan bash-completion \
-		hostapd git ethtool unzip ifenslave libpam-systemd iperf3 \
+		git ethtool unzip ifenslave libpam-systemd iperf3 \
 		software-properties-common libnss-myhostname f2fs-tools avahi-autoipd iputils-arping qrencode sunxi-tools"
 fi
 
