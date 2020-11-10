@@ -81,6 +81,25 @@ install_version_jethome() {
   fi
 }
 
+install_pip3_packages() {
+  print_title "Installing pip3 packages"
+
+  if ! pip3 install pyserial; then
+    echo "pyserial failed"
+    exit 1
+  fi
+
+  if ! pip3 install intelhex; then
+    echo "intelhex failed"
+    exit 1
+  fi
+
+  if ! pip3 install python-magic; then
+    echo "python-magic failed"
+    exit 1
+  fi
+}
+
 Main() {
   case $RELEASE in
     focal)
@@ -90,6 +109,7 @@ Main() {
           customization_install_prebuilt_packages
           customization_install_rootfs_patches
           install_version_jethome
+          install_pip3_packages
         fi
       fi
       ;;
