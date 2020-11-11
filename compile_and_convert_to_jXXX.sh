@@ -1,16 +1,14 @@
-#/bin/bash -x
-#
-# -x        Print commands and their arguments as they are executed.
+#!/bin/bash
 
 set -e # Exit immediately if a command exits with a non-zero status
 
 # Script parameters handling
 while [[ "${1}" == *=* ]]; do
-    parameter=${1%%=*}
-    value=${1##*=}
-    shift
-    echo "$0: setting $parameter to" "${value:-(empty)}"
-    eval "$parameter=\"$value\""
+	parameter=${1%%=*}
+	value=${1##*=}
+	shift
+	echo "$0: setting $parameter to" "${value:-(empty)}"
+	eval "$parameter=\"$value\""
 done
 
 set -u # Treat unset variables and parameters as an error
@@ -32,11 +30,11 @@ if [[ -n "${JETHOME_CUSTOMIZATION_NAME:-}" ]]; then
 	USERPATCHES_OVERLAY_CUSTOMIZATION_ROOTFS_PATCHES=$USERPATCHES_OVERLAY/rootfs_patches/${JETHOME_CUSTOMIZATION_NAME:-}
 fi
 
-mkdir -pv $USERPATCHES_KERNEL_ARM_64
-mkdir -pv $USERPATCHES_SOURCES_FAMILIES
-mkdir -pv $USERPATCHES_OVERLAY
+mkdir -pv "$USERPATCHES_KERNEL_ARM_64"
+mkdir -pv "$USERPATCHES_SOURCES_FAMILIES"
+mkdir -pv "$USERPATCHES_OVERLAY"
 
-rm -fv $USERPATCHES_KERNEL_ARM_64/*
+rm -fv "$USERPATCHES_KERNEL_ARM_64/"*
 
 RM_USERPATCHES_OVERLAY="rm -frv $USERPATCHES_OVERLAY/*"
 
@@ -45,30 +43,31 @@ if [[ "${EUID}" == "0" ]]; then
 elif grep -q "$(whoami)" <(getent group docker); then
 	$RM_USERPATCHES_OVERLAY
 else
+	# do not put quotation marks here to avoid error:
 	sudo $RM_USERPATCHES_OVERLAY
 fi
 
-cp -fv $JETHOME/patch/kernel/arm-64-current/* $USERPATCHES_KERNEL_ARM_64/
-cp -fv $JETHOME/patch/sources/families/arm-64.conf $USERPATCHES_SOURCES_FAMILIES/
-cp -frv $JETHOME/overlay/* $USERPATCHES_OVERLAY/
-cp -fv $JETHOME/customize-image.sh $USERPATCHES/
-cp -fv $JETHOME/lib.config $USERPATCHES/
+cp -fv "$JETHOME/patch/kernel/arm-64-current/"* "$USERPATCHES_KERNEL_ARM_64/"
+cp -fv "$JETHOME/patch/sources/families/arm-64.conf" "$USERPATCHES_SOURCES_FAMILIES/"
+cp -frv "$JETHOME/overlay/"* "$USERPATCHES_OVERLAY/"
+cp -fv "$JETHOME/customize-image.sh" "$USERPATCHES/"
+cp -fv "$JETHOME/lib.config" "$USERPATCHES/"
 
 if [[ -n "${JETHOME_CUSTOMIZATION_NAME:-}" ]]; then
-	mkdir -pv $USERPATCHES_OVERLAY_CUSTOMIZATION_PREBUILT_DEBS
+	mkdir -pv "$USERPATCHES_OVERLAY_CUSTOMIZATION_PREBUILT_DEBS"
 	if compgen -G "$JETHOME/customization/${JETHOME_CUSTOMIZATION_NAME:-}/packages/*.deb"; then
-		cp -fv $JETHOME/customization/${JETHOME_CUSTOMIZATION_NAME:-}/packages/*.deb $USERPATCHES_OVERLAY_CUSTOMIZATION_PREBUILT_DEBS/
+		cp -fv "$JETHOME/customization/${JETHOME_CUSTOMIZATION_NAME:-}/packages/"*.deb "$USERPATCHES_OVERLAY_CUSTOMIZATION_PREBUILT_DEBS/"
 	fi
 
-	mkdir -pv $USERPATCHES_OVERLAY_CUSTOMIZATION_ROOTFS_PATCHES
+	mkdir -pv "$USERPATCHES_OVERLAY_CUSTOMIZATION_ROOTFS_PATCHES"
 	if compgen -G "$JETHOME/customization/${JETHOME_CUSTOMIZATION_NAME:-}/rootfs_patches/*"; then
-		cp -frv $JETHOME/customization/${JETHOME_CUSTOMIZATION_NAME:-}/rootfs_patches/* $USERPATCHES_OVERLAY_CUSTOMIZATION_ROOTFS_PATCHES/
+		cp -frv "$JETHOME/customization/${JETHOME_CUSTOMIZATION_NAME:-}/rootfs_patches/"* "$USERPATCHES_OVERLAY_CUSTOMIZATION_ROOTFS_PATCHES/"
 	fi
 fi
 
-echo "${JETHOME_CUSTOMIZATION_NAME:-}" > $USERPATCHES_OVERLAY/JETHOME_CUSTOMIZATION_NAME
+echo "${JETHOME_CUSTOMIZATION_NAME:-}" > "$USERPATCHES_OVERLAY/JETHOME_CUSTOMIZATION_NAME"
 
-cp -fv $SRC/VERSION_JETHOME $USERPATCHES_OVERLAY/
+cp -fv "$SRC/VERSION_JETHOME" "$USERPATCHES_OVERLAY/"
 
 ./compile.sh docker \
 JETHOME_CUSTOMIZATION_NAME="${JETHOME_CUSTOMIZATION_NAME:-}" \
