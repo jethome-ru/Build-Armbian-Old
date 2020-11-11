@@ -24,6 +24,8 @@ extract_partition "ROOTFS" "$INPUT_IMG" "$ROOTFS_PARTITION_START" "$ROOTFS_PARTI
 
 echo
 
+. ../convert_armbian_common/try_install_customization_rootfs_patches.sh
+
 # shrink_rootfs_partition "$DATA_IMG"
 
 # echo

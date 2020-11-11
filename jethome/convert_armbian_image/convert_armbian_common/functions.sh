@@ -36,6 +36,19 @@ extract_partition() {
   fi
 }
 
+install_rootfs_patches() {
+  local rootfs_dir=$1
+  local rootfs_patches_dir=customization/$JETHOME_CUSTOMIZATION_NAME/rootfs_patches
+  print_cmd_title "Install $rootfs_patches_dir"
+
+  if [[ -d "${rootfs_patches_dir}" && -n "$(ls "${rootfs_patches_dir}")" ]]; then
+    echo "----> copying patches from ${rootfs_patches_dir}"
+    cp -rvf "${rootfs_patches_dir}"/* "$rootfs_dir/"
+  else
+    echo "----> skipping patches from ${rootfs_patches_dir}"
+  fi
+}
+
 repack_rootfs_partition() {
   local ARMBIAN_MNT_SUFFIX=armbian-mnt-
 
@@ -60,6 +73,10 @@ repack_rootfs_partition() {
   else
     echo "${FUNCNAME[0]}(): DATA_IMG is empty"
   fi
+}
+
+install_customization_rootfs_patches() {
+  repack_rootfs_partition "install_rootfs_patches"
 }
 
 repack_boot_partition() {

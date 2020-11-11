@@ -84,6 +84,8 @@ repack_rootfs_partition "set_swapfile" "128"
 
 echo
 
+. ../convert_armbian_common/try_install_customization_rootfs_patches.sh
+
 # repack_rootfs_partition "set_swap_memory_percents_size" "100"
 
 # echo

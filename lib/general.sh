@@ -177,7 +177,16 @@ create_sources_list()
 	else
 		# echo "deb http://"$([[ $BETA == yes ]] && echo "beta" || echo "apt" )".armbian.com $RELEASE main ${RELEASE}-utils ${RELEASE}-desktop" > "${SDCARD}"/etc/apt/sources.list.d/armbian.list
 		local jethome_release_version=$(get_jethome_release_version)
-		local jethome_repo=$([[ -n "$JETHOME_CUSTOMIZATION_NAME" ]] && echo $JETHOME_CUSTOMIZATION_NAME || ( [[ -n "$jethome_release_version" ]] && echo "main" || echo "testing" ) )
+		local jethome_repo
+		if [[ -n "$JETHOME_FORCE_REPO_NAME" ]]; then
+			jethome_repo=$JETHOME_FORCE_REPO_NAME
+		elif [[ -n "$JETHOME_CUSTOMIZATION_NAME" ]]; then
+			jethome_repo=$JETHOME_CUSTOMIZATION_NAME
+		elif [[ -n "$jethome_release_version" ]]; then
+			jethome_repo=main
+		else
+			jethome_repo=testing
+		fi
 		local jethome_repo_deb_line="deb [arch=arm64] http://repo.jethome.ru $RELEASE $jethome_repo"
 		echo "$jethome_repo_deb_line" > "${SDCARD}"/etc/apt/sources.list.d/armbian.list
 	fi
