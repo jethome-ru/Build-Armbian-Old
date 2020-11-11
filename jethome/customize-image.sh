@@ -82,22 +82,16 @@ install_version_jethome() {
 }
 
 install_pip3_packages() {
-  print_title "Installing pip3 packages"
+  local pip_packages=("pyserial" "intelhex" "python-magic")
 
-  if ! pip3 install pyserial; then
-    echo "pyserial failed"
-    exit 1
-  fi
+  print_title "Installing pip3 packages: ${pip_packages[*]}"
 
-  if ! pip3 install intelhex; then
-    echo "intelhex failed"
-    exit 1
-  fi
-
-  if ! pip3 install python-magic; then
-    echo "python-magic failed"
-    exit 1
-  fi
+  for i in "${pip_packages[@]}"; do
+    if ! pip3 install "$i"; then
+      echo "$i installation failed"
+      exit 1
+    fi
+  done
 }
 
 Main() {
