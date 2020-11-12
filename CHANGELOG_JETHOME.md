@@ -1,3 +1,7 @@
+## 1.0.4 (2020-11-12)
+* Add package python3-pip
+* Add pip3 packages: intelhex, pyserial, python-magic
+
 ## 1.0.3 (2020-10-26)
 * Exclude hostapd from installed packages to avoid syslog cluttering
 * Fix 100% memory use of /var/log
