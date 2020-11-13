@@ -440,7 +440,7 @@ if [[ ! -f "${DEB_STORAGE}"/${CHOSEN_UBOOT}_${REVISION}_${ARCH}.deb ]]; then
 fi
 
 # Compile kernel if packed .deb does not exist or use the one from repository
-if [[ ! -f ${DEB_STORAGE}/${CHOSEN_KERNEL}_${REVISION}_${ARCH}.deb ]]; then
+if [[ ! -f ${DEB_STORAGE}/${CHOSEN_KERNEL}_${JETHOME_LINUX_IMAGE_PACKAGE_VERSION}_${ARCH}.deb ]]; then
 
 	KDEB_CHANGELOG_DIST=$RELEASE
 	[[ "${REPOSITORY_INSTALL}" != *kernel* ]] && compile_kernel
@@ -486,7 +486,7 @@ if [[ $KERNEL_ONLY != yes ]]; then
 else
 	display_alert "Kernel build done" "@host" "info"
 	display_alert "Target directory" "${DEB_STORAGE}/" "info"
-	display_alert "File name" "${CHOSEN_KERNEL}_${REVISION}_${ARCH}.deb" "info"
+	display_alert "File name" "${CHOSEN_KERNEL}_${JETHOME_LINUX_IMAGE_PACKAGE_VERSION}_${ARCH}.deb" "info"
 fi
 
 # hook for function to run after build, i.e. to change owner of $SRC

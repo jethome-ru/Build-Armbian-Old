@@ -340,7 +340,7 @@ compile_kernel()
         version=$(grab_version "$kerneldir")
 
 	# create linux-source package - with already patched sources
-	local sources_pkg_dir=$SRC/.tmp/${CHOSEN_KSRC}_${REVISION}_all
+	local sources_pkg_dir=$SRC/.tmp/${CHOSEN_KSRC}_${JETHOME_LINUX_IMAGE_PACKAGE_VERSION}_all
 	rm -rf "${sources_pkg_dir}"
 	mkdir -p "${sources_pkg_dir}"/usr/src/ "${sources_pkg_dir}/usr/share/doc/linux-source-${version}-${LINUXFAMILY}" "${sources_pkg_dir}"/DEBIAN
 
@@ -417,7 +417,7 @@ compile_kernel()
 		fi
 	fi
 
-	xz < .config > "${sources_pkg_dir}/usr/src/${LINUXCONFIG}_${version}_${REVISION}_config.xz"
+	xz < .config > "${sources_pkg_dir}/usr/src/${LINUXCONFIG}_${version}_${JETHOME_LINUX_IMAGE_PACKAGE_VERSION}_config.xz"
 
 	echo -e "\n\t== kernel ==\n" >> "${DEST}"/debug/compilation.log
 	eval CCACHE_BASEDIR="$(pwd)" env PATH="${toolchain}:${PATH}" \
@@ -448,7 +448,7 @@ compile_kernel()
 	echo -e "\n\t== deb packages: image, headers, firmware, dtb ==\n" >> "${DEST}"/debug/compilation.log
 	eval CCACHE_BASEDIR="$(pwd)" env PATH="${toolchain}:${PATH}" \
 		'make -j1 $kernel_packing \
-		KDEB_PKGVERSION=$REVISION \
+		KDEB_PKGVERSION=$JETHOME_LINUX_IMAGE_PACKAGE_VERSION \
 		BRANCH=$BRANCH \
 		LOCALVERSION="-${LINUXFAMILY}" \
 		KBUILD_DEBARCH=$ARCH \
@@ -462,7 +462,7 @@ compile_kernel()
 
 	cat <<-EOF > "${sources_pkg_dir}"/DEBIAN/control
 	Package: linux-source-${version}-${BRANCH}-${LINUXFAMILY}
-	Version: ${version}-${BRANCH}-${LINUXFAMILY}+${REVISION}
+	Version: ${version}-${BRANCH}-${LINUXFAMILY}+${JETHOME_LINUX_IMAGE_PACKAGE_VERSION}
 	Architecture: all
 	Maintainer: $MAINTAINER <$MAINTAINERMAIL>
 	Section: kernel

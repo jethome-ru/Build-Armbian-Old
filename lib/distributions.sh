@@ -251,14 +251,14 @@ install_common()
 
 	# install kernel
 	if [[ "${REPOSITORY_INSTALL}" != *kernel* ]]; then
-		VER=$(dpkg --info "${DEB_STORAGE}/${CHOSEN_KERNEL}_${REVISION}_${ARCH}.deb" | grep Descr | awk '{print $(NF)}')
+		VER=$(dpkg --info "${DEB_STORAGE}/${CHOSEN_KERNEL}_${JETHOME_LINUX_IMAGE_PACKAGE_VERSION}_${ARCH}.deb" | grep Descr | awk '{print $(NF)}')
 		VER="${VER/-$LINUXFAMILY/}"
-		install_deb_chroot "${DEB_STORAGE}/${CHOSEN_KERNEL}_${REVISION}_${ARCH}.deb"
-		if [[ -f ${DEB_STORAGE}/${CHOSEN_KERNEL/image/dtb}_${REVISION}_${ARCH}.deb ]]; then
-			install_deb_chroot "${DEB_STORAGE}/${CHOSEN_KERNEL/image/dtb}_${REVISION}_${ARCH}.deb"
+		install_deb_chroot "${DEB_STORAGE}/${CHOSEN_KERNEL}_${JETHOME_LINUX_IMAGE_PACKAGE_VERSION}_${ARCH}.deb"
+		if [[ -f ${DEB_STORAGE}/${CHOSEN_KERNEL/image/dtb}_${JETHOME_LINUX_IMAGE_PACKAGE_VERSION}_${ARCH}.deb ]]; then
+			install_deb_chroot "${DEB_STORAGE}/${CHOSEN_KERNEL/image/dtb}_${JETHOME_LINUX_IMAGE_PACKAGE_VERSION}_${ARCH}.deb"
 		fi
 		if [[ $INSTALL_HEADERS == yes ]]; then
-			install_deb_chroot "${DEB_STORAGE}/${CHOSEN_KERNEL/image/headers}_${REVISION}_${ARCH}.deb"
+			install_deb_chroot "${DEB_STORAGE}/${CHOSEN_KERNEL/image/headers}_${JETHOME_LINUX_IMAGE_PACKAGE_VERSION}_${ARCH}.deb"
 		fi
 	else
 		VER=$(chroot "${SDCARD}" /bin/bash -c "apt-cache --names-only search ^linux-image-${BRANCH}-${LINUXFAMILY} | awk '{print \$(NF)}'")
@@ -320,8 +320,8 @@ install_common()
 	fi
 
 	# install kernel sources
-	if [[ -f ${DEB_STORAGE}/${CHOSEN_KSRC}_${REVISION}_all.deb && $INSTALL_KSRC == yes ]]; then
-		install_deb_chroot "${DEB_STORAGE}/${CHOSEN_KSRC}_${REVISION}_all.deb"
+	if [[ -f ${DEB_STORAGE}/${CHOSEN_KSRC}_${JETHOME_LINUX_IMAGE_PACKAGE_VERSION}_all.deb && $INSTALL_KSRC == yes ]]; then
+		install_deb_chroot "${DEB_STORAGE}/${CHOSEN_KSRC}_${JETHOME_LINUX_IMAGE_PACKAGE_VERSION}_all.deb"
 	fi
 
 	# install wireguard tools
