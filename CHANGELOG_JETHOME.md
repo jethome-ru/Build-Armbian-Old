@@ -1,3 +1,6 @@
+## 1.0.5 (2020-11-13)
+* Fix random network connection death on j100
+
 ## 1.0.4 (2020-11-12)
 * Add package python3-pip
 * Add pip3 packages: intelhex, pyserial, python-magic
