@@ -156,7 +156,7 @@
 	phy-handle = <&eth_phy0>;
 	phy-mode = "rmii";
 	internal_phy=<0>;
-	interrupts = <GIC_SPI 8 1>;
+	interrupts = <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>;
 
 	mdio {
 		compatible = "snps,dwmac-mdio";
