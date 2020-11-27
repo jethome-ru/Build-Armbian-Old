@@ -1,0 +1,14 @@
+[Unit]
+Description=JetHome swap file maker
+Before=basic.target
+After=armbian-resize-filesystem.service
+DefaultDependencies=no
+
+[Service]
+Type=oneshot
+ExecStart=/bin/bash /usr/lib/jethome/swap_file_maker
+TimeoutStartSec=2min
+
+[Install]
+WantedBy=basic.target
+
