@@ -80,19 +80,7 @@ extract_partition "ROOTFS" "$INPUT_IMG" "$ROOTFS_PARTITION_START" "$ROOTFS_PARTI
 
 echo
 
-repack_rootfs_partition "set_swapfile" "128"
-
-echo
-
 . ../convert_armbian_common/try_install_customization_rootfs_patches.sh
-
-# repack_rootfs_partition "set_swap_memory_percents_size" "100"
-
-# echo
-
-# shrink_rootfs_partition "$DATA_IMG"
-
-# echo
 
 print_cmd_title "Packing $OUTPUT_IMG ..."
 ./aml_image_v2_packer -r image.cfg ./ $OUTPUT_IMG

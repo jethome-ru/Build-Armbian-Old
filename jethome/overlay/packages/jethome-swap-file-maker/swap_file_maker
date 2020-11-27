@@ -1,0 +1,77 @@
+#!/bin/bash
+
+make_swap()
+{
+  local swap_size=512 # MiBs
+  local swap_path=/swapfile
+  local swap_free_space=$(env stat -f -c '%a*%S/1024/1024' / | bc)
+  local swap_etc_fstab=/etc/fstab
+  local swap_priority=6
+  local swap_zram_config=/etc/default/armbian-zram-config
+
+  if [ -n "$swap_free_space" ]; then
+    if [ ! -f "$swap_path" ]; then
+      if (( swap_free_space >= swap_size )) ;then
+        echo "dd if=/dev/zero of=$swap_path ..."
+        if dd if=/dev/zero of=$swap_path bs=1MiB count=$swap_size status=progress; then
+          chmod -v 600 $swap_path
+          if mkswap "$swap_path"; then
+            if ! grep -qP "$swap_path" $swap_etc_fstab; then
+              echo "$swap_path none swap sw,pri=$swap_priority 0 0" >> $swap_etc_fstab
+              if swapon --verbose --priority $swap_priority "$swap_path"; then
+                if grep -qP "^ENABLED=true" "$swap_zram_config"; then
+                  if sed -i -e 's/^ENABLED=true/ENABLED=false/' "$swap_zram_config"; then
+                    echo "zRam successfully disabled in $swap_zram_config with sed"
+                    if ! swapoff --verbose /dev/zram1; then
+                      echo "swapoff zRam failed"
+                    fi
+                  else
+                    echo "sed zRam disabling in $swap_zram_config failed"
+                  fi
+                else
+                  echo "zRam already disabled"
+                fi
+              else
+                echo "swapon $swap_path failed"
+              fi
+            else
+              echo "$swap_etc_fstab already contain $swap_path"
+            fi
+          fi
+        else
+          echo "dd if=/dev/zero of=$swap_path failed"
+        fi
+      else
+        echo "Unable to make swap file. swap_free_space==$swap_free_space < $swap_size"
+      fi
+    else
+      echo "$swap_path already exist. Unable to make swap file"
+    fi
+  else
+    echo "swap_free_space is empty. Unable to make swap file"
+  fi
+}
+
+make_swap_axg() {
+  if grep -Eq "^GXL.+S905W" /sys/devices/soc0/soc_id; then
+    echo "Amlogic S905W detected. Skip swap file creation"
+  elif grep -Eq "^AXG" /sys/devices/soc0/soc_id; then
+    echo "Amlogic AXG detected"
+    make_swap
+  else
+    echo "SoC detection failed. Unable to create swap file"
+  fi
+}
+
+SWAP_DEPENDENCY_SERVICE=armbian-resize-filesystem
+SWAP_MAKER_SERVICE=jethome-swap-file-maker
+
+if ! systemctl is-enabled --quiet $SWAP_DEPENDENCY_SERVICE ;then
+  echo "Service $SWAP_DEPENDENCY_SERVICE is disabled."
+  make_swap_axg
+  echo "Disabling ${SWAP_MAKER_SERVICE}.service ..."
+  systemctl disable $SWAP_MAKER_SERVICE
+else
+  echo "Service $SWAP_DEPENDENCY_SERVICE was not disabled. Skip disabling service $SWAP_MAKER_SERVICE"
+fi
+
