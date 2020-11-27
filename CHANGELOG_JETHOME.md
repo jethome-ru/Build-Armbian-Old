@@ -1,3 +1,6 @@
+## 1.0.6 (2020-11-27)
+* Increase Swap file size to allow Home Assistant Supervised be started
+
 ## 1.0.5 (2020-11-13)
 * Fix random network connection death on j100
 
