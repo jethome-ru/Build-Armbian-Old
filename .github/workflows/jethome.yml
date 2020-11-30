@@ -30,9 +30,9 @@ jobs:
     - name: Set JETHOME_CI_REPO_BUILD_TYPE variable 
       run: |
        if [[ "$GITHUB_REF" = refs/tags/jethome_release_* ]]; then \
-         echo '::set-env name=JETHOME_CI_REPO_BUILD_TYPE::release/debs'; \
+         echo "JETHOME_CI_REPO_BUILD_TYPE=release/debs" >> $GITHUB_ENV
        else \
-         echo '::set-env name=JETHOME_CI_REPO_BUILD_TYPE::beta'; \
+         echo "JETHOME_CI_REPO_BUILD_TYPE=beta" >> $GITHUB_ENV
        fi
 
     # Compile
