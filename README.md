@@ -45,10 +45,18 @@ build tools</h3>
 ## How to build an image or a kernel?
 
 ```text
-apt-get -y install git
-git clone https://github.com/150balbes/Build-Armbian
-cd Build-Armbian
-./compile.sh
+sudo apt update
+sudo apt install curl gawk git
+git clone https://github.com/jethome-ru/Build-Armbian.git Build-Armbian-JetHome
+cd Build-Armbian-JetHome
+./compile_and_convert_to_jXXX.sh
+
+# building ...
+
+ls -1 output/images/JetHome_*
+# Example output:
+output/images/JetHome_1.0.6_Armbian_20.08_Arm-64_focal_current_5.7.16_j80.img
+output/images/JetHome_1.0.6_Armbian_20.08_Arm-64_focal_current_5.7.16_j100.img
 ```
 <a href="#how-to-build-an-image-or-a-kernel"><img src=".github/README.gif" alt="Armbian logo" width="100%"></a>
 
