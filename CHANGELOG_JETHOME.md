@@ -1,3 +1,6 @@
+## 1.0.7 (2020-12-03)
+* Add platform specific hardware initialization on j100
+
 ## 1.0.6 (2020-11-27)
 * Increase Swap file size to allow Home Assistant Supervised be started
 
