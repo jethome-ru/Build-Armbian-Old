@@ -1,3 +1,6 @@
+## 1.0.8 (2021-01-21)
+* Add serial efuse key to bootloader on j80
+
 ## 1.0.7 (2020-12-03)
 * Add platform specific hardware initialization on j100
 
