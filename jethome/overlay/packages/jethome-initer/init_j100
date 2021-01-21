@@ -7,19 +7,19 @@ GPIO_ACTIVE_LOW=0
 GPIO_ACTIVE_HIGH=1
 
 GPIOS=(
-  # Discrete inputs
+  # Discrete inputs: 1, 2, 3, 4
   "472 ${GPIO_DIRECTION_INPUT} ${GPIO_ACTIVE_HIGH}"
   "471 ${GPIO_DIRECTION_INPUT} ${GPIO_ACTIVE_HIGH}"
   "470 ${GPIO_DIRECTION_INPUT} ${GPIO_ACTIVE_HIGH}"
   "469 ${GPIO_DIRECTION_INPUT} ${GPIO_ACTIVE_HIGH}"
-  # Relays
+  # Relays: 1, 2, 3
   "456 ${GPIO_DIRECTION_OUTPUT} ${GPIO_ACTIVE_HIGH}"
   "455 ${GPIO_DIRECTION_OUTPUT} ${GPIO_ACTIVE_HIGH}"
   "454 ${GPIO_DIRECTION_OUTPUT} ${GPIO_ACTIVE_HIGH}"
-  # ZigBee module
+  # Zigbee module: RESET, BOOT
   "467 ${GPIO_DIRECTION_OUTPUT} ${GPIO_ACTIVE_HIGH}"
   "462 ${GPIO_DIRECTION_OUTPUT} ${GPIO_ACTIVE_HIGH}"
-  # LEDs
+  # LEDs: RED, GREEN
   "452 ${GPIO_DIRECTION_OUTPUT} ${GPIO_ACTIVE_LOW}"
   "453 ${GPIO_DIRECTION_OUTPUT} ${GPIO_ACTIVE_LOW}"
   # Button
@@ -28,12 +28,12 @@ GPIOS=(
 
 
 configure_gpio() {
-  echo "Configure: gpio=${1}, direction=${2}, active_level=${3}"
+  echo "${0}: Configure: gpio=${1}, direction=${2}, active_level=${3}"
 
   if [ ! -d /sys/class/gpio/gpio${1} ]; then
     echo ${1} > /sys/class/gpio/export
     if [ ! -d /sys/class/gpio/gpio${1} ]; then
-      echo "** Failed to configure GPIO ${1}"
+      echo "${0}: *** Error: Failed to configure GPIO ${1}"
       exit 1
     fi
   fi
@@ -59,6 +59,12 @@ done
 echo "${0}: Turn off LEDs ..."
 echo 0 > /sys/class/gpio/gpio452/value
 echo 0 > /sys/class/gpio/gpio453/value
+
+echo "${0}: Reset Zigbee module ..."
+echo 1 > /sys/class/gpio/gpio462/value
+echo 1 > /sys/class/gpio/gpio467/value
+sleep 1
+echo 0 > /sys/class/gpio/gpio467/value
 
 echo "${0}: Configure 1-Wire ..."
 modprobe ds2482
