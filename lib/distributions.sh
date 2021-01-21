@@ -275,7 +275,7 @@ install_common()
 
 	# install board support packages
 	if [[ "${REPOSITORY_INSTALL}" != *bsp* ]]; then
-		install_deb_chroot "${DEB_STORAGE}/$RELEASE/${CHOSEN_ROOTFS}_${REVISION}_${ARCH}.deb" >> "${DEST}"/debug/install.log 2>&1
+		install_deb_chroot "${DEB_STORAGE}/$RELEASE/${CHOSEN_ROOTFS}_${JETHOME_BOARD_PACKAGE_ESCAPED_VERSION}_${ARCH}.deb" >> "${DEST}"/debug/install.log 2>&1
 	else
 		display_alert "Installing from repository" "${CHOSEN_ROOTFS}"
 		chroot "${SDCARD}" /bin/bash -c "apt -y -qq install ${CHOSEN_ROOTFS}" >> "${DEST}"/debug/install.log 2>&1

@@ -17,7 +17,7 @@ create_board_package()
 {
 	display_alert "Creating board support package" "$BOARD $BRANCH" "info"
 
-	local destination=$SRC/.tmp/${RELEASE}/${CHOSEN_ROOTFS}_${REVISION}_${ARCH}
+	local destination=$SRC/.tmp/${RELEASE}/${CHOSEN_ROOTFS}_${JETHOME_BOARD_PACKAGE_ESCAPED_VERSION}_${ARCH}
 	rm -rf "${destination}"
 	mkdir -p "${destination}"/DEBIAN
 
@@ -44,7 +44,7 @@ create_board_package()
 	# Depends: fping is needed for armbianmonitor to upload armbian-hardware-monitor.log
 	cat <<-EOF > "${destination}"/DEBIAN/control
 	Package: linux-${RELEASE}-root-${DEB_BRANCH}${BOARD}
-	Version: $REVISION
+	Version: $JETHOME_BOARD_PACKAGE_VERSION
 	Architecture: $ARCH
 	Maintainer: $MAINTAINER <$MAINTAINERMAIL>
 	Installed-Size: 1

@@ -473,7 +473,7 @@ fi
 overlayfs_wrapper "cleanup"
 
 # create board support package
-[[ -n $RELEASE && ! -f ${DEB_STORAGE}/$RELEASE/${CHOSEN_ROOTFS}_${REVISION}_${ARCH}.deb ]] && create_board_package
+[[ -n $RELEASE && ! -f ${DEB_STORAGE}/$RELEASE/${CHOSEN_ROOTFS}_${JETHOME_BOARD_PACKAGE_ESCAPED_VERSION}_${ARCH}.deb ]] && create_board_package
 
 # create desktop package
 [[ -n $RELEASE && ! -f ${DEB_STORAGE}/$RELEASE/${CHOSEN_DESKTOP}_${REVISION}_all.deb ]] && create_desktop_package
