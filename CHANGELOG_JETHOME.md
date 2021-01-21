@@ -1,3 +1,6 @@
+## 1.0.9 (2021-01-21)
+* Fix double IP address assignment
+
 ## 1.0.8 (2021-01-21)
 * Add serial efuse key to bootloader on j80
 
