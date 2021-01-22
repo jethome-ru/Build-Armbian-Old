@@ -31,9 +31,11 @@ jobs:
       - name: Set JETHOME_CI_REPO_BUILD_TYPE variable
         run: |
          if [[ "$GITHUB_REF" = refs/tags/jethome_release_* ]]; then \
-           echo "JETHOME_CI_REPO_BUILD_TYPE=release/debs" >> $GITHUB_ENV
+           echo "JETHOME_CI_REPO_BUILD_TYPE=release/debs" >> $GITHUB_ENV; \
+           echo "JETHOME_CI_REPO_NAME=main" >> $GITHUB_ENV; \
          else \
-           echo "JETHOME_CI_REPO_BUILD_TYPE=beta" >> $GITHUB_ENV
+           echo "JETHOME_CI_REPO_BUILD_TYPE=beta" >> $GITHUB_ENV; \
+           echo "JETHOME_CI_REPO_NAME=testing" >> $GITHUB_ENV; \
          fi
 
       # Compile
@@ -49,5 +51,5 @@ jobs:
 
       - name: Upload img J100 and J80
         run: |
-         rsync -a output/images/JetHome_*_Armbian_*_j100.img repo@update.jethome.ru:/var/www/update.jethome.ru/armbian/
-         rsync -a output/images/JetHome_*_Armbian_*_j80.img repo@update.jethome.ru:/var/www/update.jethome.ru/armbian/
+         rsync -a output/images/JetHome_*_Armbian_*_j100.img repo@update.jethome.ru:/var/www/update.jethome.ru/armbian/$JETHOME_CI_REPO_NAME/
+         rsync -a output/images/JetHome_*_Armbian_*_j80.img repo@update.jethome.ru:/var/www/update.jethome.ru/armbian/$JETHOME_CI_REPO_NAME/
