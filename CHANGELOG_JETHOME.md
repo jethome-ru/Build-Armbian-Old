@@ -1,3 +1,6 @@
+## 1.0.10 (2021-01-26)
+* Update platform specific hardware initialization on j80
+
 ## 1.0.9 (2021-01-21)
 * Fix double IP address assignment
 
