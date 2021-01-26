@@ -10,6 +10,9 @@ GPIOS=(
   # Zigbee module: RESET, BOOT
   "507 ${GPIO_DIRECTION_OUTPUT} ${GPIO_ACTIVE_HIGH}"
   "510 ${GPIO_DIRECTION_OUTPUT} ${GPIO_ACTIVE_HIGH}"
+  # Z-Wave module: RESET, SUSPEND
+  "490 ${GPIO_DIRECTION_OUTPUT} ${GPIO_ACTIVE_HIGH}"
+  "491 ${GPIO_DIRECTION_OUTPUT} ${GPIO_ACTIVE_HIGH}"
   # LED
   "474 ${GPIO_DIRECTION_OUTPUT} ${GPIO_ACTIVE_HIGH}"
 )
@@ -52,5 +55,12 @@ echo 1 > /sys/class/gpio/gpio510/value
 echo 1 > /sys/class/gpio/gpio507/value
 sleep 1
 echo 0 > /sys/class/gpio/gpio507/value
+
+echo "${0}: Reset Z-Wave module ..."
+# Optional SUSPEND pin
+#echo 1 > /sys/class/gpio/gpio491/value
+echo 1 > /sys/class/gpio/gpio490/value
+sleep 1
+echo 0 > /sys/class/gpio/gpio490/value
 
 exit 0
