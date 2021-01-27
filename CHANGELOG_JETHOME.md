@@ -1,3 +1,6 @@
+## 1.0.11 (2021-01-27)
+* Fix bluetooth starting failure after device reboot
+
 ## 1.0.10 (2021-01-26)
 * Update platform specific hardware initialization on j80
 
