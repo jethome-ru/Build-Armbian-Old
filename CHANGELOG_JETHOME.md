@@ -1,3 +1,6 @@
+## 1.0.12 (2021-01-29)
+* Fix not-detecting of 1GB DDR RAM by bootloader on j100
+
 ## 1.0.11 (2021-01-27)
 * Fix bluetooth starting failure after device reboot
 
