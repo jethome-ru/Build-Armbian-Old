@@ -21,6 +21,18 @@
 		reg = <0x0 0x0 0x0 0x40000000>;
 	};
 
+	reserved-memory {
+		#address-cells = <2>;
+		#size-cells = <2>;
+		ranges;
+		linux,cma {
+			compatible = "shared-dma-pool";
+			reusable; size = <0x0 0x400000>;
+			alignment = <0x0 0x400000>;
+			linux,cma-default;
+		};
+	};
+
 	aliases {
 		serial0 = &uart_AO;   /* Console */
                 serial1 = &uart_A;    /* Bluetooth */
