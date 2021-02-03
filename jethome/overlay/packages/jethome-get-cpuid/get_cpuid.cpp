@@ -20,7 +20,7 @@ std::string getCmdOutput(const char* cmd) {
 }
 
 int main() {
-  const std::string result = getCmdOutput("fw_printenv --noheader cpuid");
+  const std::string result = getCmdOutput("fw_printenv -n cpuid");
   std::cout << result;
   return EXIT_SUCCESS;
 }
