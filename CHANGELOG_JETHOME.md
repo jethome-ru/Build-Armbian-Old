@@ -1,3 +1,6 @@
+## 1.0.14 (2021-02-03)
+* Fix not working utility get_cpuid on j80/j100
+
 ## 1.0.13 (2021-02-01)
 * Increase amount of available RAM memory from kernel by 128MB on j80
 * Reduce cma-reserved memory 256MB => 4MB on j80/j100
