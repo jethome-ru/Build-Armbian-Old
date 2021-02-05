@@ -1,3 +1,6 @@
+## 1.0.15 (2021-02-05)
+* Disable and remove swap and revert zram on j100
+
 ## 1.0.14 (2021-02-03)
 * Fix not working utility get_cpuid on j80/j100
 
