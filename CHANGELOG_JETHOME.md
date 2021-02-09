@@ -1,3 +1,6 @@
+## 1.0.16 (2021-02-09)
+* Add the ability to boot custom script boot.scr from USB/MicroSD/eMMC(j80) / USB/eMMC(j100)
+
 ## 1.0.15 (2021-02-05)
 * Disable and remove swap and revert zram on j100
 
