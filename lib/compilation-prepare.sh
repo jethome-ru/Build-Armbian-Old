@@ -246,6 +246,7 @@ compilation_prepare()
 		process_patch_file "${SRC}/patch/misc/wireless-rtl8822c-0001-include-types-h-from-uapi.patch"                "applying"
 		process_patch_file "${SRC}/patch/misc/wireless-rtl8822c-0002-replace-file_operations-with-proc_ops.patch"    "applying"
 		process_patch_file "${SRC}/patch/misc/wireless-rtl8822c-0003_kconfig_change_RTL8822BS_to_RTL8822CS.patch"     "applying"
+		process_patch_file "${SRC}/patch/misc/wireless-rtl8822c-0001-Disable-powersaving.patch"     "applying"
 
 	fi
 
