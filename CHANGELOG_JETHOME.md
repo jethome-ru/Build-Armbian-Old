@@ -1,3 +1,6 @@
+## 1.0.17 (2021-02-12)
+* Fix Wi-Fi powersaving delays on j80
+
 ## 1.0.16 (2021-02-09)
 * Add the ability to boot custom script boot.scr from USB/MicroSD/eMMC(j80) / USB/eMMC(j100)
 
