@@ -239,6 +239,23 @@ fi
 	fi
 
 	systemctl --no-reload enable armbian-hardware-monitor.service armbian-hardware-optimize.service armbian-zram-config.service >/dev/null 2>&1
+
+	# Disable Wi-Fi power management for connection stability
+	wifi_powersave_conf=/etc/NetworkManager/conf.d/default-wifi-powersave-on.conf
+	if [ -f "\$wifi_powersave_conf" ]; then
+	  if grep -qP "wifi\.powersave.+=.+3" "\$wifi_powersave_conf"; then
+	    if sed -i -e 's/^wifi\.powersave\s*=\s*3/wifi\.powersave = 2/' "\$wifi_powersave_conf"; then
+	      echo "wifi power management successfully disabled"
+	    else
+	      echo "Disabling wifi power management failed: sed failed"
+	    fi
+	  else
+	    echo "Disabling wifi power management failed: unable to grep wifi\.powersave.+=.+3 \$wifi_powersave_conf"
+	  fi
+	else
+	  echo "Disabling wifi power management failed: no file \$wifi_powersave_conf"
+	fi
+
 	exit 0
 	EOF
 
