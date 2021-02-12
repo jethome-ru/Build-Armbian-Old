@@ -1,3 +1,6 @@
+## 1.0.18 (2021-02-12)
+* Disable Wi-Fi power management by default
+
 ## 1.0.17 (2021-02-12)
 * Fix Wi-Fi powersaving delays on j80
 
